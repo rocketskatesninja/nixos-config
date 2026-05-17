@@ -1,0 +1,124 @@
+{
+    "layer": "top",
+    "height": 34,
+    "spacing": 8,
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/window"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "custom/airplane",
+        "bluetooth",
+        "pulseaudio",
+        "network",
+        "cpu",
+        "memory",
+        "battery",
+        "custom/vpn",
+        "custom/tor",
+        "custom/twingate",
+        "custom/screenshot",
+        "tray"
+    ],
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰆍",
+            "2": "󰈹",
+            "3": "󰇮",
+            "4": "󰗚",
+            "active": "󰮯",
+            "default": "󰊠"
+        },
+        "persistent-workspaces": {
+            "*": 4
+        }
+    },
+    "clock": {
+        "format": "{:%b %d  %I:%M %p}",
+        "format-alt": "  {:%A, %B %d %Y}",
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "bluetooth": {
+        "format": "󰂯 {num_connections}",
+        "format-connected": "󰂱 {num_connections}",
+        "format-disabled": "",
+        "on-click": "blueman-manager",
+        "tooltip-format": "{controller_alias}\t{controller_address}"
+    },
+    "cpu": {
+        "format": "󰍛 {usage}%",
+        "interval": 2
+    },
+    "memory": {
+        "format": "󰘚 {percentage}%",
+        "interval": 2
+    },
+    "battery": {
+        "states": {
+            "good": 80,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "󰁹 {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-alt": "󰁹 {time}"
+    },
+    "network": {
+        "format-wifi": "󰤨 {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
+        "format-disconnected": "󰤭 Disconnected",
+        "format-alt": "󰤨 {ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        "format": "󰕾 {volume}%",
+        "format-muted": "󰖁 Muted",
+        "on-click": "pavucontrol"
+    },
+    "custom/vpn": {
+        "format": "󰖥 {}",
+        "return-type": "json",
+        "exec": "/home/nope/.local/bin/vpn-status",
+        "interval": 5,
+        "on-click": "pgrep -x openvpn >/dev/null && { /home/nope/.local/bin/vpn-off && notify-send 'VPN' 'Disconnected'; } || { /home/nope/.local/bin/vpn-on && notify-send 'VPN' 'Connecting...'; }"
+    },
+    "custom/airplane": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "/home/nope/.local/bin/airplane-status",
+        "interval": 3,
+        "on-click": "nmcli radio wifi | grep -q enabled && nmcli radio wifi off || nmcli radio wifi on; pkill -RTMIN+2 waybar",
+        "signal": 2
+    },
+    "custom/tor": {
+        "format": "󰗡 {}",
+        "return-type": "json",
+        "exec": "/home/nope/.local/bin/tor-status",
+        "interval": 5,
+        "on-click": "sudo iptables -t nat -L OUTPUT 2>/dev/null | grep -q '5353\\|9040' && { /home/nope/.local/bin/tor-off && notify-send 'Tor' 'Transparent proxy disabled'; } || { /home/nope/.local/bin/tor-on && notify-send 'Tor' 'All traffic routed through Tor'; }"
+    },
+    "custom/twingate": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "/home/nope/.local/bin/twingate-status",
+        "interval": 5,
+        "signal": 1,
+        "on-click": "/home/nope/.local/bin/twingate-toggle &"
+    },
+    "custom/screenshot": {
+        "format": "󰹑",
+        "return-type": "json",
+        "exec": "printf '{\"text\": \"\", \"tooltip\": \"Screenshot\"}\\n'",
+        "interval": 0,
+        "on-click": "f=~/images/screenshots/$(date +%Y%m%d-%H%M%S).png && grim $f && wl-copy < $f && notify-send 'Screenshot saved + copied' 'Full screen'",
+        "on-click-right": "f=~/images/screenshots/$(date +%Y%m%d-%H%M%S).png && grim -g \"$(slurp)\" $f && wl-copy < $f && notify-send 'Screenshot saved + copied' 'Region'"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    }
+}

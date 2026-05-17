@@ -1,0 +1,149 @@
+* {
+    font-family: "JetBrains Mono", "Nerd Fonts", monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(20, 20, 30, 0.9);
+    color: #cdd6f4;
+    border-bottom: 2px solid rgba(100, 100, 150, 0.3);
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #585b70;
+    background: transparent;
+    border-radius: 6px;
+    margin: 3px 2px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+    color: #cdd6f4;
+    background: rgba(137, 180, 250, 0.2);
+    border-bottom: 2px solid #89b4fa;
+}
+
+#workspaces button:hover {
+    color: #cdd6f4;
+    background: rgba(137, 180, 250, 0.1);
+}
+
+#window,
+#clock,
+#battery,
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#bluetooth,
+#custom-screenshot,
+#custom-airplane,
+#custom-vpn,
+#custom-tor,
+#custom-twingate,
+#tray {
+    padding: 0 12px;
+    margin: 3px 2px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+#clock {
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+#window {
+    color: #a6adc8;
+}
+
+#bluetooth {
+    color: #89b4fa;
+}
+
+#pulseaudio {
+    color: #f9e2af;
+}
+
+#pulseaudio.muted {
+    color: #585b70;
+}
+
+#network {
+    color: #a6e3a1;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+}
+
+#cpu {
+    color: #74c7ec;
+}
+
+#memory {
+    color: #cba6f7;
+}
+
+#battery {
+    color: #a6e3a1;
+}
+
+#battery.charging {
+    color: #a6e3a1;
+}
+
+#battery.warning:not(.charging) {
+    color: #f9e2af;
+}
+
+#battery.critical:not(.charging) {
+    color: #f38ba8;
+    animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+    to { color: #ffffff; }
+}
+
+#custom-screenshot {
+    color: #f5c2e7;
+}
+
+#custom-vpn {
+    color: #fab387;
+}
+
+#custom-airplane {
+    color: #f38ba8;
+}
+
+#custom-airplane.off {
+    font-size: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+#custom-tor {
+    color: #b4befe;
+}
+
+#custom-twingate {
+    color: #94e2d5;
+}
+
+#tray {
+    color: #cdd6f4;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
