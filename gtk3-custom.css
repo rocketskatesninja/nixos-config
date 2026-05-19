@@ -1,0 +1,18 @@
+@import 'colors.css';
+
+/* Make Thunar background fully opaque */
+window.thunar,
+window.thunar *,
+window.thunar .view,
+window.thunar treeview,
+window.thunar .sidebar,
+window.thunar .standard-view,
+window.thunar notebook,
+window.thunar paned,
+window.thunar scrolledwindow,
+window.thunar iconview,
+window.thunar .frame,
+window.thunar toolbar,
+window.thunar statusbar {
+    background-color: #1e1e2e;
+}
