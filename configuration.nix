@@ -23,7 +23,8 @@
     192.168.0.80 serv
     192.168.0.100 boxer
     192.168.0.69 cowboy
-    192.168.0.101 hermes
+    192.168.0.101 hermes secy.test chat.secy.test
+    192.168.0.222 hydra
     5.78.138.47 punch
   '';
 
@@ -190,6 +191,8 @@
   pavucontrol
   brightnessctl
   playerctl
+  dnsutils
+  whois
   adwaita-icon-theme
   adwaita-qt
   gnome-themes-extra
@@ -214,8 +217,8 @@
   john
   wireshark
   tor
-  obsidian
   rclone
+  tmux
   btop
   virt-manager
   xfce.thunar
@@ -263,12 +266,16 @@
   # GVFS for Thunar network browsing (SMB, etc.)
   services.gvfs.enable = true;
 
+  # Flatpak (for Obsidian and other pre-built apps)
+  services.flatpak.enable = true;
+
   # Virtualization
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
 
-  # Twingate
+  # Twingate (installed but not auto-started, toggle via waybar widget)
   services.twingate.enable = true;
+  systemd.services.twingate.wantedBy = pkgs.lib.mkForce [];
   security.sudo.extraRules = [{
     users = [ "nope" ];
     commands = [
