@@ -217,6 +217,7 @@
   john
   wireshark
   tor
+  obsidian
   rclone
   tmux
   btop
