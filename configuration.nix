@@ -40,6 +40,9 @@
   # Disable rtw89 WiFi power saving to prevent disconnects
   boot.extraModprobeConfig = "options rtw89_core disable_ps_mode=Y";
 
+  # Prevent AMD GPU TTM buffer eviction crash on suspend (5.5GB RAM too tight)
+  boot.kernelParams = [ "amdgpu.runpm=0" ];
+
   # SSD TRIM support
   services.fstrim.enable = true;
 
