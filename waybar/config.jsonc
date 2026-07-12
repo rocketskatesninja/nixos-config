@@ -38,9 +38,10 @@
         }
     },
     "clock": {
-        "format": "{:%b %d  %I:%M %p}",
-        "format-alt": "  {:%A, %B %d %Y}",
-        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+        "format": "󰃭 {:%b %d  %I:%M %p}",
+        "format-alt": "{:%I:%M:%S %p  %A, %B %d %Y}",
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "interval": 1
     },
     "bluetooth": {
         "format": "󰂯 {num_connections}",
