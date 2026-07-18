@@ -25,6 +25,11 @@ window#waybar {
     border-bottom: 2px solid #89b4fa;
 }
 
+#workspaces button .window-name {
+    color: #585b70;
+    font-size: 9px;
+}
+
 #workspaces button:hover {
     color: #cdd6f4;
     background: rgba(137, 180, 250, 0.1);
