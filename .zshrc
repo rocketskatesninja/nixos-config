@@ -14,8 +14,8 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#888888'
 
 # Aliases
 alias fman='compgen -c | fzf | xargs man'
-alias tmc='tmux new -As claude && claude'
-alias tmh='tmux new -As hermes && sudo hermes'
+alias tmc='tmux new-session -As claude "claude"'
+alias tmh='tmux new-session -As hermes "ssh hermes"'
 alias rtmc='tmux attach -t claude'
 alias rtmh='tmux attach -t hermes'
 
