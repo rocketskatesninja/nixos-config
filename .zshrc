@@ -14,6 +14,10 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#888888'
 
 # Aliases
 alias fman='compgen -c | fzf | xargs man'
+alias tmc='tmux new -As claude && claude'
+alias tmh='tmux new -As hermes && sudo hermes'
+alias rtmc='tmux attach -t claude'
+alias rtmh='tmux attach -t hermes'
 
 # Custom agnoster prompt with transparent username background
 prompt_context() {
