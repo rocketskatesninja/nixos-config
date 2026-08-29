@@ -86,17 +86,6 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=1800`.
 
 Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, Wireshark, Nmap, nmapAutomator, Netdiscover, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
 
-## Network
-
-| Host | IP | Notes |
-|------|----|-------|
-| serv | 192.168.0.80 | Local dev/staging server |
-| boxer | 192.168.0.100 | Intel N100, 16GB RAM |
-| cowboy | 192.168.0.69 | SMB share |
-| hermes | 192.168.0.101 | Ubuntu VM, Claude Code agent |
-| hydra | 192.168.0.222 | Ryzen 7 5800H, 32GB RAM, VM host |
-| punch | 5.78.138.47 | Hetzner production server |
-
 ## Repo Structure
 
 ```
