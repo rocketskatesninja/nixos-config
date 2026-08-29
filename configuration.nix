@@ -224,6 +224,7 @@
   tor
   obsidian
   slack
+  cmatrix
   rclone
   tmux
   btop
