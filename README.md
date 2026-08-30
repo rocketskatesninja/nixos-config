@@ -24,6 +24,7 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **Launcher:** Wofi
 - **Terminal:** Foot
 - **Notifications:** Mako (bottom-right)
+- **Screensaver:** glmatrix (xscreensaver) recompiled with Catppuccin Mocha Mauve via NixOS overlay — launches after 15 min idle
 - **Lock Screen:** Swaylock
 - **Login:** SDDM with Catppuccin Mocha Mauve theme, auto-login
 - **File Manager:** Thunar
