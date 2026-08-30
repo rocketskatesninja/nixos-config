@@ -1,6 +1,6 @@
 # NixOS Config — Lenovo IdeaPad 82VG
 
-![Desktop Screenshot](screenshot.png)
+![Desktop Screenshot](desktop-screenshot.png)
 
 NixOS 25.11 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland.
 
@@ -25,6 +25,8 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **Terminal:** Foot
 - **Notifications:** Mako (bottom-right)
 - **Screensaver:** glmatrix (xscreensaver) recompiled with Catppuccin Mocha Mauve via NixOS overlay — launches after 15 min idle
+
+<img src="screenshot.png" width="480" alt="glmatrix screensaver">
 - **Lock Screen:** Swaylock
 - **Login:** SDDM with Catppuccin Mocha Mauve theme, auto-login
 - **File Manager:** Thunar
