@@ -239,6 +239,7 @@
   obsidian
   slack
   cmatrix
+  wf-recorder
   xscreensaver
   rclone
   tmux
