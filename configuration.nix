@@ -5,6 +5,17 @@
 { config, pkgs, ... }:
 
 {
+  # Recompile glmatrix with Catppuccin Mocha mauve (#cba6f7) instead of green
+  nixpkgs.overlays = [
+    (final: prev: {
+      xscreensaver = prev.xscreensaver.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          sed -i 's/r = b = 0, g = 1;/r = 0.796f, g = 0.651f, b = 0.969f;/' hacks/glx/glmatrix.c
+          sed -i 's/g = 0xFF;/r = 203; g = 166; b = 247;/' hacks/glx/glmatrix.c
+        '';
+      });
+    })
+  ];
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -180,6 +191,9 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   wget
+  (pkgs.writeShellScriptBin "glmatrix" ''
+    exec ${pkgs.xscreensaver}/libexec/xscreensaver/glmatrix "$@"
+  '')
   swaylock
   swayidle
   waybar
@@ -225,6 +239,7 @@
   obsidian
   slack
   cmatrix
+  xscreensaver
   rclone
   tmux
   btop
