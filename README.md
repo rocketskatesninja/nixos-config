@@ -77,11 +77,12 @@ Left to right:
 
 | Idle Time | Action |
 |-----------|--------|
-| 10 min | Lock screen |
+| 15 min | Screensaver (glmatrix) |
 | 20 min | Display off |
 | 30 min | Suspend |
 | 60 min | Hibernate |
-| Lid close | Suspend → hibernate after 30 min |
+| Lid close | Lock immediately → hibernate after 30 min |
+| Sleep / hibernate | Lock immediately |
 
 Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=1800`.
 
