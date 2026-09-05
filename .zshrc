@@ -12,6 +12,10 @@ export PATH="$PATH:/home/nope/.local/bin"
 # Make autosuggestions more visible
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#888888'
 
+# Terminal screensaver — cmatrix after 5 min idle, any key exits
+TMOUT=300
+TRAPALRM() { cmatrix -C magenta -u 7 -s; }
+
 # Aliases
 alias fman='compgen -c | fzf | xargs man'
 
