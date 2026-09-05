@@ -170,7 +170,7 @@
     syntaxHighlighting.enable = true;
     ohMyZsh = {
       enable = true;
-      plugins = [ "git" ];
+      plugins = [ "git" "history-substring-search" ];
       theme = "agnoster";
       customPkgs = [ pkgs.zsh-autocomplete ];
     };
@@ -191,6 +191,8 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   wget
+  fzf
+  zoxide
   (pkgs.writeShellScriptBin "glmatrix" ''
     exec ${pkgs.xscreensaver}/libexec/xscreensaver/glmatrix "$@"
   '')
