@@ -27,6 +27,7 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **Screensaver:** glmatrix (xscreensaver) recompiled with Catppuccin Mocha Mauve via NixOS overlay — launches after 15 min idle
 
 ![glmatrix screensaver](screensaver.gif)
+- **Terminal Screensaver:** cmatrix (magenta) launches after 5 min of idle shell prompt — any key exits
 - **Lock Screen:** Swaylock
 - **Login:** SDDM with Catppuccin Mocha Mauve theme, auto-login
 - **File Manager:** Thunar
