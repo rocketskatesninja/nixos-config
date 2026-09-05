@@ -34,6 +34,7 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **Theme:** Catppuccin Mocha throughout (GTK, waybar, wofi, mako, foot)
 - **Cursor:** Adwaita
 - **Fonts:** JetBrains Mono Nerd Font, Font Awesome
+- **Shell:** Zsh + Oh My Zsh — custom Catppuccin Mocha pill prompt (user@host, directory, git branch), right-side clock, fzf (Ctrl+R history, Ctrl+T file picker), zoxide (`z` smart directory jumping), history-substring-search (↑/↓ partial match)
 
 ## Waybar Widgets
 
@@ -96,7 +97,7 @@ Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, Wireshark, Nmap, nma
 ```
 configuration.nix          — main NixOS system config
 hardware-configuration.nix — auto-generated hardware config
-.zshrc                     — zsh config (Oh My Zsh, agnoster theme)
+.zshrc                     — zsh config (Oh My Zsh, custom pill prompt, fzf, zoxide)
 hypr/                      — Hyprland config
 waybar/                    — waybar config and Catppuccin theme
 foot/                      — foot terminal config
