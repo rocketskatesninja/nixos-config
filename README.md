@@ -81,12 +81,19 @@ Left to right:
 |-----------|--------|
 | 15 min | Screensaver (glmatrix) |
 | 20 min | Display off |
-| 30 min | Suspend |
-| 60 min | Hibernate |
-| Lid close | Lock immediately → hibernate after 30 min |
-| Sleep / hibernate | Lock immediately |
+| 30 min | Suspend (battery only — skipped on AC) |
+| Lid close (battery) | Suspend → hibernate after 30 min |
+| Lid close (AC) | Suspend only |
 
 Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=1800`.
+
+### Battery Thresholds (UPower)
+
+| Battery | Action |
+|---------|--------|
+| 30% | Low warning |
+| 25% | Critical warning |
+| 15% | Hibernate (regardless of AC state) |
 
 ## Security Tools
 
