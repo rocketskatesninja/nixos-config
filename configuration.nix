@@ -14,6 +14,11 @@
           sed -i 's/g = 0xFF;/r = 137; g = 180; b = 250;/' hacks/glx/glmatrix.c
         '';
       });
+      unimatrix = prev.unimatrix.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          sed -i 's/\\;/\\\\;/g' unimatrix.py
+        '';
+      });
     })
   ];
   imports =
@@ -181,6 +186,12 @@
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     font-awesome
+    noto-fonts-cjk-sans
+  ];
+
+  fonts.fontconfig.defaultFonts.monospace = [
+    "JetBrainsMono Nerd Font"
+    "Noto Sans Mono CJK JP"
   ];
 
   # Allow unfree packages
@@ -241,6 +252,7 @@
   obsidian
   slack
   cmatrix
+  unimatrix
   wf-recorder
   xscreensaver
   rclone
