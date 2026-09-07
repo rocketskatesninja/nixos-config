@@ -19,7 +19,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Terminal screensaver — cmatrix after 5 min idle, any key exits
 TMOUT=120
-TRAPALRM() { cmatrix -C blue -u 7 -s; stty sane; zle reset-prompt 2>/dev/null; }
+TRAPALRM() { cmatrix -C blue -u 7 -s; }
 
 # Catppuccin Mocha LS_COLORS
 export LS_COLORS="di=1;34:ln=36:so=35:pi=33:ex=32:bd=1;33:cd=1;33:su=31:sg=31:tw=1;34:ow=1;34"
@@ -51,7 +51,7 @@ _git_segment() {
 
 _build_prompt() {
     local git=$(_git_segment)
-    PROMPT="%K{#313244}%F{#a6e3a1} %n@%m %f%k %K{#313244}%F{#89b4fa} %(4~|.../%3~|%~) %f%k${git}
+    PROMPT="%K{#313244}%F{#89b4fa} %n@%m %f%k %K{#313244}%F{#89b4fa} %(4~|.../%3~|%~) %f%k${git}
 %(?:%F{#cba6f7}:%F{#f38ba8}) ❯%f "
     RPROMPT="%K{#313244}%F{#7f849c} %D{%I:%M %p} %f%k"
 }
