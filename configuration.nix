@@ -282,6 +282,15 @@
 
   # List services that you want to enable:
 
+  # Hibernate at critical battery regardless of AC state
+  services.upower = {
+    enable = true;
+    percentageLow = 30;
+    percentageCritical = 25;
+    percentageAction = 15;
+    criticalPowerAction = "Hibernate";
+  };
+
   # Lid close behavior
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend-then-hibernate";
