@@ -1,1 +1,5 @@
 anchor=bottom-right
+default-timeout=10000
+width=450
+height=150
+font=JetBrainsMono Nerd Font 18
