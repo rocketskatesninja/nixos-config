@@ -297,9 +297,9 @@
   # Hibernate at critical battery regardless of AC state
   services.upower = {
     enable = true;
-    percentageLow = 30;
-    percentageCritical = 25;
-    percentageAction = 15;
+    percentageLow = 20;
+    percentageCritical = 10;
+    percentageAction = 5;
     criticalPowerAction = "Hibernate";
   };
 
@@ -310,9 +310,9 @@
     HandleLidSwitchDocked = "ignore";
   };
 
-  # Hibernate after 30 min of suspend to prevent overnight battery drain
+  # Hibernate after 24h of suspend (battery lasts days in suspend, no rush)
   systemd.sleep.extraConfig = ''
-    HibernateDelaySec=30min
+    HibernateDelaySec=24h
   '';
 
   # GVFS for Thunar network browsing (SMB, etc.)
