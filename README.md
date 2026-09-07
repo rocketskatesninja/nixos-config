@@ -93,7 +93,7 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=1800`.
 |---------|--------|
 | 30% | Low warning |
 | 25% | Critical warning |
-| 15% | Hibernate (regardless of AC state) |
+| 15% | Hibernate (on battery discharge only) |
 
 ## Security Tools
 
