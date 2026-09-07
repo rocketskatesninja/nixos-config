@@ -10,8 +10,8 @@
     (final: prev: {
       xscreensaver = prev.xscreensaver.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
-          sed -i 's/r = b = 0, g = 1;/r = 0.796f, g = 0.651f, b = 0.969f;/' hacks/glx/glmatrix.c
-          sed -i 's/g = 0xFF;/r = 203; g = 166; b = 247;/' hacks/glx/glmatrix.c
+          sed -i 's/r = b = 0, g = 1;/r = 0.537f, g = 0.706f, b = 0.980f;/' hacks/glx/glmatrix.c
+          sed -i 's/g = 0xFF;/r = 137; g = 180; b = 250;/' hacks/glx/glmatrix.c
         '';
       });
     })
@@ -33,7 +33,7 @@
 
   # Network aliases
   networking.extraHosts = ''
-    192.168.0.80 serv evetrade.local
+    192.168.0.80 serv evetrade.local osint.local
     192.168.0.100 boxer
     192.168.0.69 cowboy
     192.168.0.101 hermes secy.test chat.secy.test

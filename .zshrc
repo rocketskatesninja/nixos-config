@@ -19,7 +19,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Terminal screensaver — cmatrix after 5 min idle, any key exits
 TMOUT=120
-TRAPALRM() { cmatrix -C magenta -u 7 -s; stty sane; zle reset-prompt 2>/dev/null; }
+TRAPALRM() { cmatrix -C blue -u 7 -s; stty sane; zle reset-prompt 2>/dev/null; }
 
 # Catppuccin Mocha LS_COLORS
 export LS_COLORS="di=1;34:ln=36:so=35:pi=33:ex=32:bd=1;33:cd=1;33:su=31:sg=31:tw=1;34:ow=1;34"
