@@ -18,7 +18,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#585b70'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Terminal screensaver — cmatrix after 5 min idle, any key exits
-TMOUT=30
+TMOUT=120
 TRAPALRM() { cmatrix -C magenta -u 7 -s; stty sane; zle reset-prompt 2>/dev/null; }
 
 # Catppuccin Mocha LS_COLORS
