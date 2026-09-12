@@ -50,6 +50,7 @@ _git_segment() {
 }
 
 _build_prompt() {
+    printf '\e]12;#ffffff\a'
     local git=$(_git_segment)
 
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
