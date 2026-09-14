@@ -33,12 +33,12 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.luks.devices."luks-f7c388a2-4a30-4933-90d4-bb703b0c8fa2".device = "/dev/disk/by-uuid/f7c388a2-4a30-4933-90d4-bb703b0c8fa2";
   boot.resumeDevice = "/dev/disk/by-uuid/097b8142-c1ec-4e0d-90e1-e530e7a63af3";
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "zorro"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Network aliases
   networking.extraHosts = ''
-    192.168.0.80 serv evetrade.local osint.local greps.local
+    192.168.0.80 serv evetrade.local osint.local greps.local leads.local
     192.168.0.100 boxer
     192.168.0.69 cowboy
     192.168.0.101 hermes secy.test chat.secy.test
@@ -251,8 +251,9 @@
   tor
   obsidian
   slack
-  cmatrix
   unimatrix
+  recon-ng
+  aircrack-ng
   wf-recorder
   xscreensaver
   rclone

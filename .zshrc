@@ -17,9 +17,9 @@ SAVEHIST=10000
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#585b70'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# Terminal screensaver — cmatrix after 5 min idle, any key exits
+# Terminal screensaver — unimatrix after 2.5 min idle, any key exits
 TMOUT=150
-TRAPALRM() { PYTHONWARNINGS=ignore unimatrix -a -f -b -c blue -s 90 -l km -o; printf '\033c'; zle reset-prompt; }
+TRAPALRM() { PYTHONWARNINGS=ignore unimatrix -a -f -b -c blue -s 90 -l km -o; printf '\033c'; printf '\e]12;#ffffff\a'; zle reset-prompt; }
 
 # Catppuccin Mocha LS_COLORS
 export LS_COLORS="di=1;34:ln=36:so=35:pi=33:ex=32:bd=1;33:cd=1;33:su=31:sg=31:tw=1;34:ow=1;34"
