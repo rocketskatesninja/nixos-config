@@ -1,8 +1,8 @@
-# NixOS Config — Lenovo IdeaPad 82VG
+# NixOS Config — Lenovo IdeaPad 82VG (zorro)
 
 ![Desktop Screenshot](desktop-screenshot.png)
 
-NixOS 25.11 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland.
+NixOS 25.11 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland. Hostname: **zorro**.
 
 ## Hardware
 
@@ -22,18 +22,18 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **Window Manager:** Hyprland (Wayland, master layout)
 - **Status Bar:** Waybar — Catppuccin Mocha theme
 - **Launcher:** Wofi
-- **Terminal:** Foot
-- **Notifications:** Mako (bottom-right)
-- **Screensaver:** glmatrix (xscreensaver) recompiled with Catppuccin Mocha Mauve via NixOS overlay — launches after 15 min idle
+- **Terminal:** Foot (JetBrains Mono Nerd Font + Noto Sans CJK, transparent, Catppuccin Mocha)
+- **Notifications:** Mako (bottom-right, 450×150, 18pt)
+- **Screensaver:** glmatrix (xscreensaver) recompiled with Catppuccin Mocha blue via NixOS overlay — launches after 15 min idle
 
 ![glmatrix screensaver](screensaver.gif)
-- **Terminal Screensaver:** cmatrix (magenta) launches after 5 min of idle shell prompt — any key exits
+- **Terminal Screensaver:** unimatrix (katakana + Matrix charset, blue, bold, async) — launches after 2.5 min idle shell prompt — any key exits
 - **Lock Screen:** Swaylock
 - **Login:** SDDM with Catppuccin Mocha Mauve theme, auto-login
 - **File Manager:** Thunar
 - **Theme:** Catppuccin Mocha throughout (GTK, waybar, wofi, mako, foot)
 - **Cursor:** Adwaita
-- **Fonts:** JetBrains Mono Nerd Font, Font Awesome
+- **Fonts:** JetBrains Mono Nerd Font, Font Awesome, Noto Sans Mono CJK JP
 - **Shell:** Zsh + Oh My Zsh — custom Catppuccin Mocha pill prompt (user@host, directory, git branch), right-side clock, fzf (Ctrl+R history, Ctrl+T file picker), zoxide (`z` smart directory jumping), history-substring-search (↑/↓ partial match)
 
 ## Waybar Widgets
@@ -63,6 +63,7 @@ Left to right:
 | `Super + F` | Fullscreen |
 | `Super + Shift + Space` | Toggle floating |
 | `Super + Space` | Cycle next window |
+| `Super + M` | Swap focused window to master |
 | `Super + L` | Lock screen |
 | `Super + N` | Network reset (panic button) |
 | `Super + R` | Resize mode |
@@ -82,22 +83,22 @@ Left to right:
 | 15 min | Screensaver (glmatrix) |
 | 20 min | Display off |
 | 30 min | Suspend (battery only — skipped on AC) |
-| Lid close (battery) | Suspend → hibernate after 30 min |
+| Lid close (battery) | Suspend → hibernate after 24h |
 | Lid close (AC) | Suspend only |
 
-Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=1800`.
+Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 ### Battery Thresholds (UPower)
 
 | Battery | Action |
 |---------|--------|
-| 30% | Low warning |
-| 25% | Critical warning |
-| 15% | Hibernate (on battery discharge only) |
+| 20% | Low warning |
+| 10% | Critical warning |
+| 5% | Hibernate |
 
 ## Security Tools
 
-Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, Wireshark, Nmap, nmapAutomator, Netdiscover, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
+Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, Wireshark, Nmap, nmapAutomator, Netdiscover, aircrack-ng, recon-ng, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
 
 ## Repo Structure
 
@@ -122,3 +123,5 @@ claude-memory/             — Claude Code memory files
 - **Slow file dialogs:** xdg-portal with hyprland + gtk portals
 - **GTK transparent backgrounds:** `gtk.css` with `window, window * { background-color: #1e1e2e; }`
 - **TERM scrambling over SSH:** `SetEnv TERM=xterm-256color` in SSH config
+- **Katakana in terminal screensaver:** unimatrix with `noto-fonts-cjk-sans` + explicit foot font fallback
+- **Cursor color overridden by zsh-autocomplete:** Force white cursor via OSC 12 (`\e]12;#ffffff\a`) in precmd
