@@ -98,7 +98,18 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 ## Security Tools
 
-Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, Wireshark, Nmap, nmapAutomator, Netdiscover, aircrack-ng, recon-ng, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
+Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, hashcat, Wireshark, Nmap, netcat, nmapAutomator, Netdiscover, aircrack-ng, recon-ng, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
+
+## File Sharing
+
+`~/public/` is shared via two methods, restricted to `192.168.0.0/24` only:
+
+| Method | Access |
+|--------|--------|
+| HTTP | `http://zorro/` — directory listing, browser-friendly |
+| SMB | `\\zorro\public` or `smb://zorro/public` — read-only, no password |
+
+Drop files in `~/public/` and they're immediately available to anyone on the LAN. Ports 80, 139, 445, 137, 138 are firewalled to LAN subnet only — dropped silently from outside.
 
 ## Repo Structure
 

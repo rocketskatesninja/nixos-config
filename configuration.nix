@@ -237,6 +237,8 @@
   openvpn
   proxychains-ng
   nmap
+  netcat-gnu
+  hashcat
   netdiscover
   pentestgpt
   sherlock
@@ -314,6 +316,54 @@
   # Hibernate after 24h of suspend (battery lasts days in suspend, no rush)
   systemd.sleep.extraConfig = ''
     HibernateDelaySec=24h
+  '';
+
+  # Public file sharing — SMB + HTTP for /home/nope/public
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        workgroup = "WORKGROUP";
+        "server string" = "zorro";
+        security = "user";
+        "map to guest" = "bad user";
+      };
+      public = {
+        path = "/home/nope/public";
+        browseable = "yes";
+        "read only" = "yes";
+        "guest ok" = "yes";
+      };
+    };
+  };
+  services.samba-wsdd.enable = true;
+
+  services.httpd = {
+    enable = true;
+    adminAddr = "nope@zorro";
+    virtualHosts."zorro" = {
+      documentRoot = "/home/nope/public";
+      extraConfig = ''
+        <Directory "/home/nope/public">
+          Options Indexes FollowSymLinks
+          AllowOverride None
+          Require all granted
+        </Directory>
+      '';
+    };
+  };
+
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -s 192.168.0.0/24 -p tcp --dport 80 -j nixos-fw-accept
+    iptables -A nixos-fw -s 192.168.0.0/24 -p tcp --dport 139 -j nixos-fw-accept
+    iptables -A nixos-fw -s 192.168.0.0/24 -p tcp --dport 445 -j nixos-fw-accept
+    iptables -A nixos-fw -s 192.168.0.0/24 -p udp --dport 137 -j nixos-fw-accept
+    iptables -A nixos-fw -s 192.168.0.0/24 -p udp --dport 138 -j nixos-fw-accept
+  '';
+
+  # Allow Apache (wwwrun) to traverse into /home/nope to serve /home/nope/public
+  system.activationScripts.homeTraversable = ''
+    chmod 711 /home/nope
   '';
 
   # GVFS for Thunar network browsing (SMB, etc.)
