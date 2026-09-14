@@ -98,7 +98,7 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 ## Security Tools
 
-**Exploitation:** Metasploit, Burp Suite, sqlmap, impacket
+**Exploitation:** Metasploit, Burp Suite, sqlmap, impacket, netexec
 
 **Password:** THC Hydra, John the Ripper, hashcat
 
@@ -110,7 +110,7 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 **Reverse Engineering:** Ghidra, binwalk
 
-**Other:** exploitdb (searchsploit), proxychains-ng, Tor (transparent proxy), openvpn, Twingate
+**Other:** exploitdb (searchsploit), proxychains-ng, Tor (transparent proxy), openvpn, Twingate, pipx
 
 ## File Sharing
 

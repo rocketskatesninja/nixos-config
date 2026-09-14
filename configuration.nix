@@ -249,6 +249,7 @@
   subfinder
   exploitdb
   python3Packages.impacket
+  netexec
   ghidra
   binwalk
   pentestgpt
@@ -270,6 +271,7 @@
   wf-recorder
   xscreensaver
   rclone
+  pipx
   tmux
   btop
   virt-manager
