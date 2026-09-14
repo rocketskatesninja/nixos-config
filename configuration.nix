@@ -238,8 +238,19 @@
   proxychains-ng
   nmap
   netcat-gnu
+  masscan
   hashcat
   netdiscover
+  gobuster
+  ffuf
+  nikto
+  nuclei
+  amass
+  subfinder
+  exploitdb
+  python3Packages.impacket
+  ghidra
+  binwalk
   pentestgpt
   sherlock
   theharvester
