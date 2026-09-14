@@ -98,7 +98,19 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 ## Security Tools
 
-Metasploit, Burp Suite, sqlmap, THC Hydra, John the Ripper, hashcat, Wireshark, Nmap, netcat, nmapAutomator, Netdiscover, aircrack-ng, recon-ng, Sherlock, theHarvester, PentestGPT, Tor (transparent proxy via iptables)
+**Exploitation:** Metasploit, Burp Suite, sqlmap, impacket
+
+**Password:** THC Hydra, John the Ripper, hashcat
+
+**Network:** Nmap, masscan, netcat, Wireshark, nmapAutomator, Netdiscover, aircrack-ng
+
+**Web:** gobuster, ffuf, nikto, nuclei
+
+**OSINT / Recon:** recon-ng (with API keys), amass, subfinder, Sherlock, theHarvester, PentestGPT
+
+**Reverse Engineering:** Ghidra, binwalk
+
+**Other:** exploitdb (searchsploit), proxychains-ng, Tor (transparent proxy), openvpn, Twingate
 
 ## File Sharing
 
