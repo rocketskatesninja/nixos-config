@@ -17,7 +17,7 @@ if [ "$COUNT" -eq 1 ]; then
     OVPN_FILE="$OVPN_FILES"
 else
     SELECTED=$(echo "$OVPN_FILES" | xargs -I{} basename {} .ovpn | wofi --dmenu --prompt "Select VPN" --width 500 --height 200)
-    [ -z "$SELECTED" ] && exit 0
+    [ -z "$SELECTED" ] && exit 1
     OVPN_FILE="$OVPN_DIR/$SELECTED.ovpn"
 fi
 
