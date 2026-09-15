@@ -11,17 +11,31 @@ window#waybar {
 }
 
 #workspaces button {
-    padding: 0 8px;
+    all: unset;
+    padding: 2px 8px;
     color: #585b70;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 6px;
-    margin: 3px 2px;
+    margin: 4px 2px;
     transition: all 0.2s ease;
+    min-height: 0;
+}
+
+#workspaces button:last-child {
+    padding-right: 12px;
+}
+
+#workspaces button * {
+    all: unset;
+    background: transparent;
+    background-color: transparent;
+    color: inherit;
+    font-size: inherit;
 }
 
 #workspaces button.active {
-    color: #cdd6f4;
-    background: rgba(137, 180, 250, 0.2);
+    color: #89b4fa;
+    background: rgba(137, 180, 250, 0.25);
     border-bottom: 2px solid #89b4fa;
 }
 
@@ -32,7 +46,7 @@ window#waybar {
 
 #workspaces button:hover {
     color: #cdd6f4;
-    background: rgba(137, 180, 250, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #window,
@@ -49,10 +63,10 @@ window#waybar {
 #custom-tor,
 #custom-twingate,
 #tray {
-    padding: 0 12px;
-    margin: 3px 2px;
+    padding: 2px 12px;
+    margin: 4px 2px;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.12);
     transition: all 0.2s ease;
 }
 
@@ -63,6 +77,12 @@ window#waybar {
 
 #window {
     color: #a6adc8;
+}
+
+#window label,
+#window image {
+    background: transparent;
+    background-color: transparent;
 }
 
 #bluetooth {
@@ -116,6 +136,7 @@ window#waybar {
 
 #custom-screenshot {
     color: #f5c2e7;
+    padding: 2px 16px 2px 12px;
 }
 
 #custom-vpn {
@@ -143,6 +164,11 @@ window#waybar {
 
 #tray {
     color: #cdd6f4;
+}
+
+#tray * {
+    background: transparent;
+    background-color: transparent;
 }
 
 #tray > .passive {
