@@ -472,6 +472,24 @@
   # Hard-link identical files in the nix store to save space (SSD-friendly)
   nix.optimise.automatic = true;
 
+  # Limit parallel nix builds to prevent RAM exhaustion during nixos-rebuild
+  nix.settings.max-jobs = 2;
+  nix.settings.cores = 2;
+
+  # Distribute hardware interrupts across all cores
+  services.irqbalance.enable = true;
+
+  # zstd gives better compression ratio than lzo-rle — fits more in zram
+  zramSwap.algorithm = "zstd";
+
+  boot.kernel.sysctl = {
+    # Use zram aggressively before evicting file cache (ideal with zram swap)
+    "vm.swappiness" = 100;
+    # TCP BBR congestion control — better throughput on WiFi/VPN
+    "net.core.default_qdisc" = "fq";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+  };
+
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
