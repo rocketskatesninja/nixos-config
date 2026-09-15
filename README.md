@@ -164,7 +164,7 @@ claude-memory/             — Claude Code memory files
 - **WiFi disconnects:** `rtw89_core disable_ps_mode=Y` via `boot.extraModprobeConfig`
 - **AMD GPU suspend crash:** `amdgpu.runpm=0` kernel parameter
 - **Slow file dialogs:** xdg-portal with hyprland + gtk portals
-- **GTK transparent backgrounds:** `gtk.css` with `window, window * { background-color: #1e1e2e; }`
+- **GTK transparent backgrounds:** `gtk.css` with Thunar-specific opaque rules; broad `window, window *` rule removed so wofi can manage its own CSS border
 - **TERM scrambling over SSH:** `SetEnv TERM=xterm-256color` in SSH config
 - **Katakana in terminal screensaver:** unimatrix with `noto-fonts-cjk-sans` + explicit foot font fallback
 - **Cursor color overridden by zsh-autocomplete:** Force white cursor via OSC 12 (`\e]12;#ffffff\a`) in precmd

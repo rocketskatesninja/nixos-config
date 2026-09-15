@@ -17,8 +17,3 @@ window.thunar statusbar {
     background-color: #1e1e2e;
 }
 
-/* Make all GTK app backgrounds opaque */
-window,
-window * {
-    background-color: #1e1e2e;
-}

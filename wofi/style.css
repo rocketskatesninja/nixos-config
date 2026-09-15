@@ -1,15 +1,16 @@
 window {
     margin: 0;
-    border: none;
+    padding: 0;
     border-radius: 14px;
-    background-color: #89b4fa;
+    background-color: transparent;
     font-family: "JetBrainsMono Nerd Font", monospace;
     font-size: 15px;
 }
 
 #outer-box {
-    margin: 2px;
+    margin: 0;
     padding: 0;
+    border: 2px solid #89b4fa;
     border-radius: 12px;
     background-color: rgba(24, 24, 37, 0.97);
 }
