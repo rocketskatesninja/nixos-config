@@ -138,6 +138,9 @@ Drop files in `~/public/` and they're immediately available to anyone on the LAN
 - **IRQ balance:** `services.irqbalance.enable = true` — distributes interrupts across all 4 cores
 - **CPU driver:** `amd-pstate-epp` (active by default on Zen 4) — hardware P-state management
 - **NVMe scheduler:** `none` (kernel default for NVMe) — drive handles its own queuing
+- **Boot time:** `serial8250.nr_uarts=0` kernel param — eliminates ~50s serial port timeout on boot
+- **Firefox VA-API:** `media.ffmpeg.vaapi.enabled` + `LIBVA_DRIVER_NAME=radeonsi` — AMD GPU hardware video decoding
+- **Zsh startup:** fzf/zoxide/seclists init results cached to `~/.cache/` — ~275ms startup vs ~330ms uncached
 
 ## Repo Structure
 
@@ -165,5 +168,6 @@ claude-memory/             — Claude Code memory files
 - **TERM scrambling over SSH:** `SetEnv TERM=xterm-256color` in SSH config
 - **Katakana in terminal screensaver:** unimatrix with `noto-fonts-cjk-sans` + explicit foot font fallback
 - **Cursor color overridden by zsh-autocomplete:** Force white cursor via OSC 12 (`\e]12;#ffffff\a`) in precmd
+- **Serial port boot delay:** `serial8250.nr_uarts=0` kernel param — without it, kernel probes non-existent serial ports and times out (~50s)
 - **Metasploit DB init:** msfdb conflicts with system PostgreSQL on port 5432 — remove `~/.msf4/db` and set msf user password via `sudo -u postgres psql`
 - **Apache 403 on ~/public:** nixos-rebuild resets `/home/nope` to 700 — fixed via `system.activationScripts.homeTraversable`
