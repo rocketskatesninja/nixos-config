@@ -13,4 +13,4 @@ insensitive=true
 allow_images=true
 image_size=28
 cache_file=/home/nope/.cache/wofi-drun
-sort_order=alphabetical
+sort_order=default
