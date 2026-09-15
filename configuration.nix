@@ -469,6 +469,9 @@
     options = "--delete-older-than 3d";
   };
 
+  # Hard-link identical files in the nix store to save space (SSD-friendly)
+  nix.optimise.automatic = true;
+
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
