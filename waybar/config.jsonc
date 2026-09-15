@@ -89,7 +89,7 @@
         "return-type": "json",
         "exec": "/home/nope/.local/bin/vpn-status",
         "interval": 5,
-        "on-click": "pgrep -x openvpn >/dev/null && { /home/nope/.local/bin/vpn-off && notify-send 'VPN' 'Disconnected'; } || { /home/nope/.local/bin/vpn-on && notify-send 'VPN' 'Connecting...'; }"
+        "on-click": "pgrep -x openvpn >/dev/null && { /home/nope/.local/bin/vpn-off && notify-send 'VPN' 'Disconnecting...'; } || { /home/nope/.local/bin/vpn-on && notify-send 'VPN' 'Connecting...'; }"
     },
     "custom/airplane": {
         "format": "{}",
