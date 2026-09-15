@@ -2,7 +2,7 @@
 
 ![Desktop Screenshot](desktop-screenshot.png)
 
-NixOS 25.11 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland. Hostname: **zorro**.
+NixOS 26.05 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland. Hostname: **zorro**.
 
 ## Hardware
 
@@ -13,7 +13,7 @@ NixOS 25.11 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland.
 | GPU | AMD Radeon 610M (integrated) |
 | Storage | 238.5 GB SK Hynix NVMe SSD |
 | WiFi | Realtek rtw89_8852be |
-| OS | NixOS 25.11 |
+| OS | NixOS 26.05 |
 
 Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited RAM.
 
@@ -112,7 +112,7 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 **Reverse Engineering:** Ghidra, binwalk
 
-**Other:** exploitdb (searchsploit), proxychains-ng, Tor (transparent proxy), openvpn, Twingate, pipx
+**Other:** exploitdb (searchsploit), proxychains-ng, Tor (transparent proxy), openvpn, Twingate
 
 ## File Sharing
 
@@ -170,4 +170,9 @@ claude-memory/             — Claude Code memory files
 - **Cursor color overridden by zsh-autocomplete:** Force white cursor via OSC 12 (`\e]12;#ffffff\a`) in precmd
 - **Serial port boot delay:** `serial8250.nr_uarts=0` kernel param — without it, kernel probes non-existent serial ports and times out (~50s)
 - **Metasploit DB init:** msfdb conflicts with system PostgreSQL on port 5432 — remove `~/.msf4/db` and set msf user password via `sudo -u postgres psql`
+- **Metasploit DB collation after upgrade:** after a PostgreSQL upgrade run `ALTER DATABASE msf_database REFRESH COLLATION VERSION;`
 - **Apache 403 on ~/public:** nixos-rebuild resets `/home/nope` to 700 — fixed via `system.activationScripts.homeTraversable`
+- **NixOS 26.05 upgrade — Hyprland 0.55 breaking changes:** `windowrulev2` removed; new `windowrule` format is space-separated without comma (`windowrule = workspace 2 class:firefox`); `noanim` replaced by `animation none`; `systemd.sleep.extraConfig` replaced by `systemd.sleep.settings.Sleep`
+- **NixOS 26.05 upgrade — foot:** `[colors]` section renamed to `[colors-dark]`
+- **NixOS 26.05 upgrade — Samba:** services renamed from `smbd`/`nmbd` to `samba-smbd`/`samba-nmbd`
+- **NixOS 26.05 upgrade — pipx:** broken test suite in nixpkgs 26.05, removed from config until fixed upstream
