@@ -1,0 +1,31 @@
+#!/bin/sh
+OVPN_DIR="$HOME/keys/vpn"
+OVPN_FILES=$(find "$OVPN_DIR" -name '*.ovpn' -type f 2>/dev/null | sort)
+
+if [ -z "$OVPN_FILES" ]; then
+    notify-send "VPN" "No .ovpn file found in ~/keys/vpn/"
+    exit 1
+fi
+
+if pgrep -x openvpn >/dev/null 2>&1; then
+    notify-send "VPN" "Already connected"
+    exit 0
+fi
+
+COUNT=$(echo "$OVPN_FILES" | wc -l)
+if [ "$COUNT" -eq 1 ]; then
+    OVPN_FILE="$OVPN_FILES"
+else
+    SELECTED=$(echo "$OVPN_FILES" | xargs -I{} basename {} .ovpn | wofi --dmenu --prompt "Select VPN" --width 300 --height 200)
+    [ -z "$SELECTED" ] && exit 0
+    OVPN_FILE="$OVPN_DIR/$SELECTED.ovpn"
+fi
+
+sudo openvpn --config "$OVPN_FILE" --daemon --log /tmp/openvpn.log \
+    --script-security 2 \
+    --up /etc/openvpn/update-resolv-conf \
+    --down /etc/openvpn/update-resolv-conf 2>/dev/null
+
+if [ $? -ne 0 ]; then
+    sudo openvpn --config "$OVPN_FILE" --daemon --log /tmp/openvpn.log
+fi
