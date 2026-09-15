@@ -44,6 +44,7 @@
     192.168.0.101 hermes secy.test chat.secy.test
     192.168.0.222 hydra
     5.78.138.47 punch
+    192.168.0.239 metasploitable
   '';
 
   # Configure network proxy if necessary
@@ -207,7 +208,7 @@
   (pkgs.writeShellScriptBin "glmatrix" ''
     exec ${pkgs.xscreensaver}/libexec/xscreensaver/glmatrix "$@"
   '')
-  swaylock
+  hyprlock
   swayidle
   waybar
   wofi
@@ -225,6 +226,7 @@
   playerctl
   dnsutils
   whois
+  wirelesstools
   adwaita-icon-theme
   adwaita-qt
   gnome-themes-extra
@@ -268,6 +270,11 @@
   unimatrix
   recon-ng
   aircrack-ng
+  seclists
+  dnsrecon
+  enum4linux
+  smbmap
+  smtp-user-enum
   wf-recorder
   xscreensaver
   rclone
@@ -296,6 +303,7 @@
       mkdir -p $out/bin
       cp nmapAutomator.sh $out/bin/nmapAutomator
       chmod +x $out/bin/nmapAutomator
+      sed -i 's|/usr/share/nmap/scripts/vulners.nse|${pkgs.nmap}/share/nmap/scripts/vulners.nse|g' $out/bin/nmapAutomator
     '';
   })
   ];
@@ -374,6 +382,17 @@
     iptables -A nixos-fw -s 192.168.0.0/24 -p udp --dport 138 -j nixos-fw-accept
   '';
 
+  # Wordlist symlinks so tools that expect /usr/share/wordlists/ work on NixOS
+  system.activationScripts.wordlistSymlinks = ''
+    mkdir -p /usr/share/wordlists/dirb
+    SECLISTS=$(echo /nix/store/*seclists*/share/wordlists/seclists)
+    MSF_WORDLISTS=$(echo /nix/store/*metasploit*/share/msf/data/wordlists)
+    ln -sfn "$SECLISTS" /usr/share/wordlists/seclists
+    ln -sfn "$SECLISTS/Discovery/Web-Content/common.txt" /usr/share/wordlists/dirb/common.txt
+    rm -rf /usr/share/wordlists/metasploit
+    ln -sfn "$MSF_WORDLISTS" /usr/share/wordlists/metasploit
+  '';
+
   # Allow Apache (wwwrun) to traverse into /home/nope to serve /home/nope/public
   system.activationScripts.homeTraversable = ''
     chmod 711 /home/nope
@@ -398,6 +417,12 @@
       { command = "ALL"; options = [ "NOPASSWD" ]; }
     ];
   }];
+
+  # PostgreSQL for Metasploit
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_16;
+  };
 
   # Tor service with transparent proxy
   services.tor = {

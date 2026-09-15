@@ -28,7 +28,7 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 
 ![glmatrix screensaver](screensaver.gif)
 - **Terminal Screensaver:** unimatrix (katakana + Matrix charset, blue, bold, async) — launches after 2.5 min idle shell prompt — any key exits
-- **Lock Screen:** Swaylock
+- **Lock Screen:** Hyprlock — blurred wallpaper, 12-hour clock, date, battery %, password field
 - **Login:** SDDM with Catppuccin Mocha Mauve theme, auto-login
 - **File Manager:** Thunar
 - **Theme:** Catppuccin Mocha throughout (GTK, waybar, wofi, mako, foot)
@@ -102,11 +102,13 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 **Password:** THC Hydra, John the Ripper, hashcat
 
-**Network:** Nmap, masscan, netcat, Wireshark, nmapAutomator, Netdiscover, aircrack-ng
+**Network:** Nmap, masscan, netcat, Wireshark, wirelesstools, aircrack-ng, nmapAutomator, Netdiscover, dnsrecon, enum4linux, smbmap, smtp-user-enum
 
 **Web:** gobuster, ffuf, nikto, nuclei
 
 **OSINT / Recon:** recon-ng (with API keys), amass, subfinder, Sherlock, theHarvester, PentestGPT
+
+**Wordlists:** SecLists
 
 **Reverse Engineering:** Ghidra, binwalk
 
