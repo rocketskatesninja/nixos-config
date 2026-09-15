@@ -47,7 +47,7 @@ Left to right:
 - Volume
 - Network (WiFi)
 - CPU / Memory / Battery
-- OpenVPN status/toggle
+- OpenVPN status/toggle (wofi picker when multiple .ovpn files present)
 - Tor transparent proxy toggle
 - Twingate VPN toggle
 - Screenshot (left click = full screen, right click = region)
@@ -125,6 +125,13 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 Drop files in `~/public/` and they're immediately available to anyone on the LAN. Ports 80, 139, 445, 137, 138 are firewalled to LAN subnet only — dropped silently from outside.
 
+## Disk / Storage Management
+
+- **TRIM:** `services.fstrim.enable = true` — weekly TRIM for SSD health
+- **Nix store optimisation:** `nix.optimise.automatic = true` — periodic hard-link dedup to save space
+- **Nix GC:** `nix.gc.automatic = true` — weekly, deletes generations older than 3 days
+- **Journal cap:** `SystemMaxUse=200M` via `services.journald.extraConfig`
+
 ## Repo Structure
 
 ```
@@ -138,6 +145,7 @@ wofi/                      — wofi launcher config
 mako/                      — mako notification config
 gtk3-custom.css            — GTK3 overrides (opaque backgrounds)
 ssh-config                 — SSH client config
+vpn-on                     — OpenVPN connect script (wofi picker for multiple .ovpn files)
 claude-memory/             — Claude Code memory files
 ```
 
@@ -150,3 +158,5 @@ claude-memory/             — Claude Code memory files
 - **TERM scrambling over SSH:** `SetEnv TERM=xterm-256color` in SSH config
 - **Katakana in terminal screensaver:** unimatrix with `noto-fonts-cjk-sans` + explicit foot font fallback
 - **Cursor color overridden by zsh-autocomplete:** Force white cursor via OSC 12 (`\e]12;#ffffff\a`) in precmd
+- **Metasploit DB init:** msfdb conflicts with system PostgreSQL on port 5432 — remove `~/.msf4/db` and set msf user password via `sudo -u postgres psql`
+- **Apache 403 on ~/public:** nixos-rebuild resets `/home/nope` to 700 — fixed via `system.activationScripts.homeTraversable`
