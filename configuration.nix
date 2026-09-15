@@ -284,7 +284,7 @@
   wf-recorder
   xscreensaver
   rclone
-  pipx
+  # pipx removed — broken tests in nixpkgs 26.05, re-add when fixed
   tmux
   btop
   virt-manager
@@ -341,9 +341,9 @@
   };
 
   # Hibernate after 24h of suspend (battery lasts days in suspend, no rush)
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=24h
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "24h";
+  };
 
   # Public file sharing — SMB + HTTP for /home/nope/public
   services.samba = {
