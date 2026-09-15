@@ -24,11 +24,19 @@ TRAPALRM() { PYTHONWARNINGS=ignore unimatrix -a -f -b -c blue -s 90 -l km -o; pr
 # Catppuccin Mocha LS_COLORS
 export LS_COLORS="di=1;34:ln=36:so=35:pi=33:ex=32:bd=1;33:cd=1;33:su=31:sg=31:tw=1;34:ow=1;34"
 
-# fzf — Ctrl+R for fuzzy history, Ctrl+T for fuzzy file find
-source <(fzf --zsh)
+# fzf — cache init so it doesn't re-evaluate on every shell open
+_fzf_bin=$(command -v fzf)
+if [[ ! -f ~/.cache/fzf-init.zsh || "$_fzf_bin" -nt ~/.cache/fzf-init.zsh ]]; then
+    mkdir -p ~/.cache && fzf --zsh > ~/.cache/fzf-init.zsh
+fi
+source ~/.cache/fzf-init.zsh
 
-# zoxide — smarter cd, use 'z <partial-name>' to jump to visited dirs
-eval "$(zoxide init zsh)"
+# zoxide — cache init so it doesn't re-evaluate on every shell open
+_zoxide_bin=$(command -v zoxide)
+if [[ ! -f ~/.cache/zoxide-init.zsh || "$_zoxide_bin" -nt ~/.cache/zoxide-init.zsh ]]; then
+    mkdir -p ~/.cache && zoxide init zsh > ~/.cache/zoxide-init.zsh
+fi
+source ~/.cache/zoxide-init.zsh
 
 # history-substring-search — type partial command then use ↑/↓
 bindkey '^[[A' history-substring-search-up
@@ -36,6 +44,13 @@ bindkey '^[[B' history-substring-search-down
 
 # Aliases
 alias fman='compgen -c | fzf | xargs man'
+alias proxychains='proxychains4 -f ~/.config/proxychains/proxychains.conf'
+
+# SecLists wordlists — cache nix store path (glob is slow to expand every time)
+if [[ ! -f ~/.cache/seclists-path || ! -d "$(cat ~/.cache/seclists-path 2>/dev/null)" ]]; then
+    mkdir -p ~/.cache && echo /nix/store/*seclists*/share/wordlists/seclists > ~/.cache/seclists-path
+fi
+export SECLISTS=$(cat ~/.cache/seclists-path)
 
 # Custom prompt — colored pills + right-side clock
 setopt PROMPT_SUBST

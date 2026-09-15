@@ -60,7 +60,7 @@
   boot.extraModprobeConfig = "options rtw89_core disable_ps_mode=Y";
 
   # Prevent AMD GPU TTM buffer eviction crash on suspend (5.5GB RAM too tight)
-  boot.kernelParams = [ "amdgpu.runpm=0" ];
+  boot.kernelParams = [ "amdgpu.runpm=0" "serial8250.nr_uarts=0" ];
 
   # SSD TRIM support
   services.fstrim.enable = true;
@@ -108,6 +108,9 @@
   environment.variables = {
     XCURSOR_THEME = "Adwaita";
     XCURSOR_SIZE = "24";
+    # AMD VA-API hardware video decoding for Firefox
+    LIBVA_DRIVER_NAME = "radeonsi";
+    MOZ_DISABLE_RDD_SANDBOX = "1";
   };
 
   # Hyprland window manager
@@ -166,6 +169,9 @@
       "dom.ipc.processCount" = 2;
       "dom.ipc.processPrelaunch.fission.number" = 0;
       "fission.autostart" = false;
+      # AMD GPU hardware video decoding via VA-API
+      "media.ffmpeg.vaapi.enabled" = true;
+      "media.hardware-video-decoding.force-enabled" = true;
     };
   };
 
