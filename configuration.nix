@@ -457,6 +457,18 @@
     allowReboot = false;
   };
 
+  # Cap journal size so it doesn't grow unboundedly
+  services.journald.extraConfig = ''
+    SystemMaxUse=200M
+  '';
+
+  # Weekly GC — keep last 3 generations, delete the rest
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 3d";
+  };
+
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
