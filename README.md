@@ -125,12 +125,19 @@ Uses `systemctl suspend-then-hibernate` with `HibernateDelaySec=24h`.
 
 Drop files in `~/public/` and they're immediately available to anyone on the LAN. Ports 80, 139, 445, 137, 138 are firewalled to LAN subnet only — dropped silently from outside.
 
-## Disk / Storage Management
+## Performance & Storage
 
 - **TRIM:** `services.fstrim.enable = true` — weekly TRIM for SSD health
 - **Nix store optimisation:** `nix.optimise.automatic = true` — periodic hard-link dedup to save space
 - **Nix GC:** `nix.gc.automatic = true` — weekly, deletes generations older than 3 days
+- **Nix build limits:** `max-jobs = 2`, `cores = 2` — prevents builds from exhausting RAM
 - **Journal cap:** `SystemMaxUse=200M` via `services.journald.extraConfig`
+- **zram algorithm:** `zstd` — better compression ratio than default `lzo-rle`, fits more in swap
+- **Swappiness:** `vm.swappiness = 100` — uses zram aggressively before evicting file cache
+- **TCP BBR:** `net.ipv4.tcp_congestion_control = bbr` — better throughput on WiFi/VPN
+- **IRQ balance:** `services.irqbalance.enable = true` — distributes interrupts across all 4 cores
+- **CPU driver:** `amd-pstate-epp` (active by default on Zen 4) — hardware P-state management
+- **NVMe scheduler:** `none` (kernel default for NVMe) — drive handles its own queuing
 
 ## Repo Structure
 
