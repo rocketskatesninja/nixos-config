@@ -1,0 +1,8 @@
+#!/bin/sh
+if systemctl is-active --quiet twingate; then
+    t="On"
+else
+    t="Off"
+fi
+
+printf '{"text": "%s", "tooltip": "Twingate: %s"}\n' "$t" "$t"

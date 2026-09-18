@@ -1,0 +1,22 @@
+#!/bin/sh
+# Launched by noctalia's idle system at the configured screensaver timeout.
+# Opens a dedicated kitty window running the TTE screensaver and force-fullscreens
+# it via hyprctl. kitty's own --start-as=fullscreen was tried first but its PTY
+# never actually grew to the real screen's cell grid (stayed near kitty's normal
+# startup size), so the art rendered small even though the window looked
+# fullscreen-ish; hyprctl dispatch fullscreen genuinely resizes the surface (and
+# therefore the PTY), it just has to happen after the window exists.
+# The paired resumeCommand kills it (pkill -f org.zorro.screensaver) on activity.
+
+pgrep -f "org.zorro.screensaver" >/dev/null 2>&1 && exit 0
+
+kitty --class org.zorro.screensaver -e /home/nope/nixos-config/screensaver &
+
+for i in $(seq 1 25); do
+    if hyprctl clients -j 2>/dev/null | grep -q '"class": "org.zorro.screensaver"'; then
+        hyprctl dispatch focuswindow "class:org.zorro.screensaver" >/dev/null 2>&1
+        hyprctl dispatch fullscreen 0 >/dev/null 2>&1
+        exit 0
+    fi
+    sleep 0.1
+done

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Dispatcher for the bar's VPN widget on-click - backgrounds the real work
+# so the bar doesn't freeze while vpn-on polls for connection.
+if pgrep -x openvpn >/dev/null 2>&1; then
+    /home/nope/.local/bin/vpn-off &
+else
+    /home/nope/.local/bin/vpn-on &
+fi
+disown

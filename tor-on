@@ -1,0 +1,65 @@
+#!/bin/sh
+STATE=/tmp/tor-state
+
+set_state() {
+    echo "$1" > "$STATE"
+}
+
+set_state "connecting"
+notify-send "Tor" "Enabling transparent proxy..."
+
+TOR_UID=$(id -u tor 2>/dev/null || echo 43)
+
+# Flush existing rules
+sudo iptables -t nat -F
+
+# Don't redirect Tor's own traffic
+sudo iptables -t nat -A OUTPUT -m owner --uid-owner $TOR_UID -j RETURN
+
+# Don't redirect local traffic
+sudo iptables -t nat -A OUTPUT -d 127.0.0.0/8 -j RETURN
+sudo iptables -t nat -A OUTPUT -d 192.168.0.0/16 -j RETURN
+sudo iptables -t nat -A OUTPUT -d 10.0.0.0/8 -j RETURN
+sudo iptables -t nat -A OUTPUT -d 172.16.0.0/12 -j RETURN
+
+# Redirect DNS to Tor
+sudo iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 5353
+
+# Redirect all TCP to Tor TransPort
+sudo iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports 9040
+
+# Block non-TCP/UDP (prevent leaks)
+sudo iptables -A OUTPUT -m owner --uid-owner $TOR_UID -j ACCEPT
+sudo iptables -A OUTPUT -d 127.0.0.0/8 -j ACCEPT
+sudo iptables -A OUTPUT -d 192.168.0.0/16 -j ACCEPT
+sudo iptables -A OUTPUT -d 10.0.0.0/8 -j ACCEPT
+
+# Block IPv6 to prevent leaks
+sudo ip6tables -A OUTPUT -j REJECT
+
+rollback() {
+    sudo iptables -t nat -F
+    sudo iptables -F
+    sudo iptables -P OUTPUT ACCEPT
+    sudo ip6tables -F
+    sudo ip6tables -P OUTPUT ACCEPT
+    # iptables -F above wipes the LAN-only scoping on SMB/HTTP; restore it
+    sudo systemctl restart firewall
+}
+
+if ! systemctl is-active --quiet tor; then
+    rollback
+    set_state "off"
+    notify-send -u critical "Tor" "tor.service is not running - redirect rules NOT applied"
+    exit 1
+fi
+
+if ! ss -tln 2>/dev/null | grep -q ':9040 '; then
+    rollback
+    set_state "off"
+    notify-send -u critical "Tor" "TransPort 9040 not listening - redirect rules NOT applied"
+    exit 1
+fi
+
+set_state "on"
+notify-send "Tor" "All traffic routed through Tor"

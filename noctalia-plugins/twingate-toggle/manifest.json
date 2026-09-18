@@ -1,0 +1,22 @@
+{
+  "id": "twingate-toggle",
+  "name": "Twingate Toggle",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.0",
+  "author": "nope",
+  "license": "MIT",
+  "repository": "https://github.com/rocketskatesninja/nixos-config",
+  "description": "Status + click-to-toggle for the Twingate service (systemctl start/stop twingate)",
+  "tags": ["Bar", "Network", "Indicator"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshInterval": 5000
+    }
+  }
+}

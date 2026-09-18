@@ -1,0 +1,16 @@
+#!/bin/sh
+STATE=$(cat /tmp/vpn-state 2>/dev/null)
+
+if pgrep -x openvpn >/dev/null 2>&1; then
+    if ip link show tun0 >/dev/null 2>&1; then
+        t="On"
+    else
+        t="Connecting"
+    fi
+elif [ "$STATE" = "connecting" ]; then
+    t="Connecting"
+else
+    t="Off"
+fi
+
+printf '{"text": "%s", "tooltip": "VPN: %s"}\n' "$t" "$t"

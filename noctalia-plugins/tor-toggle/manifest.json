@@ -1,0 +1,22 @@
+{
+  "id": "tor-toggle",
+  "name": "Tor Toggle",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.0",
+  "author": "nope",
+  "license": "MIT",
+  "repository": "https://github.com/rocketskatesninja/nixos-config",
+  "description": "Status + click-to-toggle for the Tor transparent proxy (tor-on/tor-off scripts)",
+  "tags": ["Bar", "Network", "Privacy", "Indicator"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshInterval": 5000
+    }
+  }
+}

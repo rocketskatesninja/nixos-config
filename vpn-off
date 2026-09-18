@@ -1,0 +1,18 @@
+#!/bin/sh
+STATE=/tmp/vpn-state
+
+if ! pgrep -x openvpn >/dev/null 2>&1; then
+    notify-send "VPN" "Not connected"
+    exit 0
+fi
+
+notify-send "VPN" "Disconnecting..."
+sudo pkill -x openvpn
+
+for i in $(seq 1 10); do
+    pgrep -x openvpn >/dev/null 2>&1 || break
+    sleep 1
+done
+
+echo "off" > "$STATE"
+notify-send "VPN" "Disconnected"

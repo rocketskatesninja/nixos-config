@@ -1,0 +1,67 @@
+#!/bin/sh
+OVPN_DIR="$HOME/keys/vpn"
+LOG=/tmp/openvpn.log
+STATE=/tmp/vpn-state
+
+set_state() {
+    echo "$1" > "$STATE"
+}
+
+OVPN_FILES=$(find "$OVPN_DIR" -name '*.ovpn' -type f 2>/dev/null | sort)
+
+if [ -z "$OVPN_FILES" ]; then
+    notify-send -u critical "VPN" "No .ovpn file found in ~/keys/vpn/"
+    exit 1
+fi
+
+if pgrep -x openvpn >/dev/null 2>&1; then
+    notify-send "VPN" "Already connected"
+    exit 0
+fi
+
+COUNT=$(echo "$OVPN_FILES" | wc -l)
+if [ "$COUNT" -eq 1 ]; then
+    OVPN_FILE="$OVPN_FILES"
+else
+    # No dmenu-style picker installed since the noctalia-shell migration —
+    # just use whichever .ovpn was dropped in most recently.
+    OVPN_FILE=$(echo "$OVPN_FILES" | xargs ls -t | head -1)
+    notify-send "VPN" "Multiple .ovpn files found, using most recent: $(basename "$OVPN_FILE" .ovpn)"
+fi
+
+NAME=$(basename "$OVPN_FILE" .ovpn)
+
+set_state "connecting"
+notify-send "VPN" "Connecting to $NAME..."
+
+sudo rm -f "$LOG"
+sudo openvpn --config "$OVPN_FILE" --daemon --log "$LOG"
+
+if [ $? -ne 0 ]; then
+    set_state "off"
+    notify-send -u critical "VPN" "openvpn failed to start - check $LOG"
+    exit 1
+fi
+
+# --daemon forks immediately, so success/failure of the actual tunnel
+# only shows up in the log a bit later - poll for it. THM in particular
+# can take up to ~60s before giving up if the server never responds.
+for i in $(seq 1 60); do
+    if ! pgrep -x openvpn >/dev/null 2>&1; then
+        ERR=$(sudo grep -iE 'error|cannot resolve|auth.?fail|fatal' "$LOG" | tail -3)
+        set_state "off"
+        notify-send -u critical "VPN" "Connection to $NAME failed: ${ERR:-openvpn exited, check $LOG}"
+        exit 1
+    fi
+    if sudo grep -q "Initialization Sequence Completed" "$LOG" 2>/dev/null; then
+        set_state "on"
+        notify-send "VPN" "Connected ($NAME)"
+        exit 0
+    fi
+    sleep 1
+done
+
+set_state "off"
+notify-send -u critical "VPN" "Timed out waiting for $NAME to connect (60s, no response from server) - check $LOG"
+sudo pkill -x openvpn
+exit 1

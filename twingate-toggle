@@ -1,0 +1,11 @@
+#!/bin/sh
+# Dispatcher for the Twingate bar widget on-click - backgrounds the real work
+# so the shell doesn't freeze while systemctl starts the service.
+if systemctl is-active --quiet twingate; then
+    sudo systemctl stop twingate &
+    notify-send "Twingate" "Disconnecting..."
+else
+    sudo systemctl start twingate &
+    notify-send "Twingate" "Connecting..."
+fi
+disown

@@ -1,0 +1,17 @@
+#!/bin/sh
+STATE=/tmp/tor-state
+
+notify-send "Tor" "Disabling transparent proxy..."
+
+# Remove all Tor transparent proxy rules
+sudo iptables -t nat -F
+sudo iptables -F
+sudo iptables -P OUTPUT ACCEPT
+sudo ip6tables -F
+sudo ip6tables -P OUTPUT ACCEPT
+
+# iptables -F above wipes the LAN-only scoping on SMB/HTTP; restore it
+sudo systemctl restart firewall
+
+echo "off" > "$STATE"
+notify-send "Tor" "Transparent proxy disabled"

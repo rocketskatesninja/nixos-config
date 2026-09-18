@@ -1,0 +1,16 @@
+#!/bin/sh
+STATE=$(cat /tmp/tor-state 2>/dev/null)
+
+if [ "$STATE" = "connecting" ]; then
+    t="Connecting"
+elif [ "$STATE" = "on" ]; then
+    if ss -tln 2>/dev/null | grep -q ':9040 '; then
+        t="On"
+    else
+        t="Off"
+    fi
+else
+    t="Off"
+fi
+
+printf '{"text": "%s", "tooltip": "Tor: %s"}\n' "$t" "$t"

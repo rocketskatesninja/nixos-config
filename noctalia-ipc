@@ -1,0 +1,12 @@
+#!/bin/sh
+# Calls into the running noctalia-shell instance by IPC. Looks up its live
+# config path via `qs list` rather than hardcoding a /nix/store path, since
+# that path changes on every noctalia-shell package update. --any-display
+# works around a display-connection string mismatch in quickshell's IPC
+# instance filter (wayland/wayland-1 vs wayland,wayland-1).
+CONFIG_PATH=$(qs list --all 2>/dev/null | awk -F': ' '/Config path:/{print $2; exit}')
+if [ -z "$CONFIG_PATH" ]; then
+    notify-send -u critical "noctalia-shell" "No running instance found"
+    exit 1
+fi
+exec qs ipc --any-display -p "$CONFIG_PATH" call "$@"

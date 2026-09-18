@@ -1,0 +1,9 @@
+#!/bin/sh
+# Dispatcher for the bar's Tor widget on-click - backgrounds the real work
+# so the bar doesn't block, matching the vpn-toggle/twingate-toggle pattern.
+if sudo iptables -t nat -L OUTPUT 2>/dev/null | grep -q '5353\|9040'; then
+    /home/nope/.local/bin/tor-off &
+else
+    /home/nope/.local/bin/tor-on &
+fi
+disown

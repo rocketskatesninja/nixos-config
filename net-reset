@@ -1,0 +1,10 @@
+#!/bin/sh
+# Panic button (Super+N) - tear down Tor/Twingate and restore a clean network state.
+notify-send -u critical "Net Reset" "Panic button pressed - resetting network state..."
+
+/home/nope/.local/bin/tor-off >/dev/null 2>&1
+
+sudo systemctl stop twingate
+sudo systemctl restart NetworkManager
+
+notify-send "Net Reset" "Done: Tor off, Twingate stopped, NetworkManager restarted"
