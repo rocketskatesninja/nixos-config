@@ -1,0 +1,27 @@
+#!/bin/sh
+# Cycle to the next/previous workspace, skipping empty ones. Workspaces 1-4
+# are persistent:true (stay numbered/visible even when empty), which means
+# Hyprland's own e+1/e-1 dispatcher treats them as "existing" and cycles
+# through the empty ones too -- this fills that gap.
+DIR="$1" # next|prev
+
+CUR=$(hyprctl activeworkspace | awk '/^workspace ID/{print $3; exit}')
+
+IDS=$(hyprctl workspaces | awk -v cur="$CUR" '
+/^workspace ID/ { id=$3 }
+/windows:/ { w=$2; if (w+0 > 0 || id==cur) print id }
+' | sort -n)
+
+COUNT=$(printf '%s\n' "$IDS" | wc -l)
+[ "$COUNT" -le 1 ] && exit 0
+
+INDEX=$(printf '%s\n' "$IDS" | grep -nx "$CUR" | cut -d: -f1)
+
+if [ "$DIR" = "prev" ]; then
+    NEWIDX=$(( (INDEX - 2 + COUNT) % COUNT + 1 ))
+else
+    NEWIDX=$(( INDEX % COUNT + 1 ))
+fi
+
+TARGET=$(printf '%s\n' "$IDS" | sed -n "${NEWIDX}p")
+hyprctl dispatch workspace "$TARGET"

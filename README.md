@@ -51,10 +51,10 @@ Each plugin is a `manifest.json` + `BarWidget.qml` pair, installed by symlinking
 | `Super + N` | Network reset (panic button) |
 | `Super + R` | Resize mode |
 | `Super + Shift + E` | Exit Hyprland |
-| `Super + 1-4` | Switch workspace |
-| `Super + Shift + 1-4` | Move window to workspace |
-| `Ctrl + Tab` | Next workspace |
-| `Ctrl + Shift + Tab` | Previous workspace |
+| `Super + 1-3` | Switch workspace |
+| `Super + Shift + 1-3` | Move window to workspace |
+| `Ctrl + Tab` | Next non-empty workspace |
+| `Ctrl + Shift + Tab` | Previous non-empty workspace |
 | `Alt + Tab` | Cycle windows |
 | `Print` | Full screenshot |
 | `Super + Print` | Region screenshot |
@@ -137,6 +137,7 @@ noctalia-ipc               — helper for calling into the running noctalia-shel
 launch-screensaver         — spawns the fullscreen kitty screensaver, called by noctalia's idle system
 screensaver                — the screensaver itself (terminaltexteffects animation over the hostname)
 net-reset                  — panic button (Super+N): kills Tor/Twingate, restarts NetworkManager
+workspace-cycle            — Ctrl+Tab/Ctrl+Shift+Tab: cycle workspaces, skipping empty ones
 ssh-config                 — SSH client config
 vpn-on/off/status/toggle   — OpenVPN connect/status scripts
 tor-on/off/status/toggle   — Tor transparent proxy scripts

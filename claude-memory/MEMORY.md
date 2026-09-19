@@ -50,7 +50,7 @@ See [packages.md](packages.md) for full list
 - 12-hour time format everywhere
 - Dark mode (catppuccin mocha theme)
 - Natural scroll DISABLED on touchpad and mouse
-- 4 Hyprland workspaces: 1=foot+foot+thunar, 2=firefox, 3=thunderbird, 4=free
+- 3 Hyprland workspaces: 1=kitty+kitty+thunar, 2=firefox, 3=thunderbird. Telegram no longer auto-launched/pinned (was workspace 4, removed) — launch manually when wanted, opens wherever's focused. `Ctrl+Tab`/`Ctrl+Shift+Tab` cycle non-empty workspaces only via `workspace-cycle` script (workspaces are `persistent:true`, so Hyprland's own `e+1`/`e-1` would otherwise include empty ones)
 - Master layout in Hyprland
 - Ctrl+Tab/Ctrl+Shift+Tab to switch workspaces
 - Alt+Tab to cycle windows
