@@ -24,9 +24,25 @@ if [ "$COUNT" -eq 1 ]; then
     OVPN_FILE="$OVPN_FILES"
 else
     # No dmenu-style picker installed since the noctalia-shell migration —
-    # just use whichever .ovpn was dropped in most recently.
-    OVPN_FILE=$(echo "$OVPN_FILES" | xargs ls -t | head -1)
-    notify-send "VPN" "Multiple .ovpn files found, using most recent: $(basename "$OVPN_FILE" .ovpn)"
+    # build the picker out of notify-send actions instead, since noctalia's
+    # own notification daemon supports them.
+    set --
+    i=0
+    while IFS= read -r f; do
+        set -- "$@" -A "${i}=$(basename "$f" .ovpn)"
+        i=$((i + 1))
+    done <<EOF
+$OVPN_FILES
+EOF
+
+    CHOICE=$(notify-send -t 0 "$@" "VPN" "Select a profile to connect:")
+
+    if [ -z "$CHOICE" ]; then
+        notify-send "VPN" "No profile selected, aborting"
+        exit 0
+    fi
+
+    OVPN_FILE=$(echo "$OVPN_FILES" | sed -n "$((CHOICE + 1))p")
 fi
 
 NAME=$(basename "$OVPN_FILE" .ovpn)
