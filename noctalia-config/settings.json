@@ -135,10 +135,10 @@
                 {
                     "clockColor": "none",
                     "customFont": "",
-                    "formatHorizontal": "HH:mm ddd, MMM dd",
-                    "formatVertical": "HH mm - dd MM",
+                    "formatHorizontal": "h:mm AP ddd, MMM dd",
+                    "formatVertical": "h mm AP - dd MM",
                     "id": "Clock",
-                    "tooltipFormat": "HH:mm ddd, MMM dd",
+                    "tooltipFormat": "h:mm AP ddd, MMM dd",
                     "useCustomFont": false
                 },
                 {
@@ -269,7 +269,7 @@
         "predefinedScheme": "Nord",
         "schedulingMode": "off",
         "syncGsettings": true,
-        "useWallpaperColors": true
+        "useWallpaperColors": false
     },
     "controlCenter": {
         "cards": [
@@ -450,7 +450,7 @@
         "wallpaperChange": ""
     },
     "idle": {
-        "customCommands": "[{\"timeout\":900,\"command\":\"/home/nope/nixos-config/launch-screensaver\",\"resumeCommand\":\"pkill -f org.zorro.screensaver\",\"name\":\"Screensaver\"}]",
+        "customCommands": "[{\"timeout\":900,\"command\":\"/home/nope/nixos-config/launch-screensaver\",\"resumeCommand\":\"/home/nope/nixos-config/dismiss-screensaver\",\"name\":\"Screensaver\"}]",
         "enabled": true,
         "fadeDuration": 5,
         "lockCommand": "",

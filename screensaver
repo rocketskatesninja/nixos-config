@@ -12,10 +12,19 @@
 # waiting out whatever effect happens to be mid-play.
 
 ART_FILE=$(mktemp)
+PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
+echo $$ > "$PIDFILE"
+tte_pid=""
 
 exit_screensaver() {
-    rm -f "$ART_FILE"
-    printf '\033[?1049l'  # leave alternate screen — restores prior content
+    [ -n "$tte_pid" ] && kill -TERM "$tte_pid" 2>/dev/null
+    # Drain any leftover bytes (e.g. the trailing "[A" of an arrow-key escape
+    # sequence whose first byte woke the read loop below) so they don't leak
+    # into whatever regains focus once this window closes.
+    while read -t 0.02 -n 1 -s _; do :; done
+    stty sane 2>/dev/null
+    printf '\033[?1049l\033[?25h'  # leave alternate screen, ensure cursor visible
+    rm -f "$ART_FILE" "$PIDFILE"
     exit 0
 }
 trap exit_screensaver INT TERM HUP QUIT
@@ -86,16 +95,13 @@ while true; do
 
     while kill -0 "$tte_pid" 2>/dev/null; do
         if read -t 0.1 -n 1 -s _; then
-            kill -TERM "$tte_pid" 2>/dev/null
-            wait "$tte_pid" 2>/dev/null
             exit_screensaver
         fi
     done
     wait "$tte_pid" 2>/dev/null
+    tte_pid=""
 
     if read -t 0.1 -n 1 -s _; then
-        break
+        exit_screensaver
     fi
 done
-
-exit_screensaver

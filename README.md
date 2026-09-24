@@ -28,7 +28,7 @@ Storage is LUKS encrypted with ext4. zram swap enabled to compensate for limited
 - **File Manager:** Thunar
 - **Cursor:** Adwaita
 - **Fonts:** JetBrains Mono Nerd Font, Font Awesome, Noto Sans Mono CJK JP
-- **Shell:** Zsh + Oh My Zsh (agnoster theme), fzf (Ctrl+R history, Ctrl+T file picker), zoxide (`z` smart directory jumping), history-substring-search (↑/↓ partial match)
+- **Shell:** Zsh + Oh My Zsh (agnoster theme), fzf (Ctrl+R history, Ctrl+T file picker), zoxide (`z` smart directory jumping), zsh-autocomplete (↑/↓ live history/completion list)
 
 ## Bar Widgets (custom plugins)
 
@@ -140,6 +140,7 @@ noctalia-plugins/          — custom vpn/tor/twingate bar-widget plugins for no
 noctalia-ipc               — helper for calling into the running noctalia-shell (launcher, lock screen)
 launch-screensaver         — spawns the fullscreen kitty screensaver, called by noctalia's idle system
 screensaver                — the screensaver itself (terminaltexteffects animation over the hostname)
+dismiss-screensaver        — noctalia idle resumeCommand: signals the screensaver's pidfile on activity
 net-reset                  — panic button (Super+N): kills Tor/Twingate, restarts NetworkManager
 workspace-cycle            — Ctrl+Tab/Ctrl+Shift+Tab: cycle workspaces, skipping empty ones
 ssh-config                 — SSH client config
@@ -165,3 +166,5 @@ claude-memory/             — Claude Code memory files
 - **`nixos-upgrade.service` failing with exit 4/NOPERMISSION:** the new Rust `switch-to-configuration` needs to reach the logged-in user's runtime dir to reload user units, which isn't reliable from the timer's detached background context unless lingering is enabled — fixed via `users.users.nope.linger = true`
 - **Tor toggle silently opening SMB/HTTP to the world:** `tor-on`/`tor-off` flush the whole iptables filter table (`iptables -F`), which also wipes the LAN-only scoping on ports 80/139/445/137/138 — nothing re-applied it until reboot. Both scripts now run `systemctl restart firewall` right after the flush.
 - **Twingate not auto-starting despite `twingate setup` asking to enable it:** that prompt only affects Twingate's own internal config; boot behavior is actually governed by `systemd.services.twingate.wantedBy = mkForce []` here, which deliberately keeps it manual (toggle via bar widget)
+- **Up/Down arrow only doing plain history recall instead of zsh-autocomplete's live list:** `.zshrc` had explicit `bindkey '^[[A'/'^[[B' history-substring-search-up/down` calls left over from before `zsh-autocomplete` was added to `programs.zsh.ohMyZsh.customPkgs`; sourced after Oh My Zsh, they silently clobbered zsh-autocomplete's own arrow-key bindings. Removed — zsh-autocomplete now owns Up/Down.
+- **Screensaver leaking raw escape-sequence bytes into the terminal:** noctalia's idle `resumeCommand` was empty, so the screensaver only self-dismissed on a keypress landing in its own focused window; its dismiss check also read only 1 byte (`read -n 1`), so the first byte of a multi-byte key (e.g. an arrow key's `ESC`) triggered exit while the remaining bytes (`[A`) stayed unread and could surface as literal characters wherever focus went next. Fixed via `dismiss-screensaver` (a real `resumeCommand` that signals the screensaver's own pidfile) plus draining any leftover input and `stty sane` in its exit trap.

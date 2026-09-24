@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
@@ -176,8 +176,14 @@
       enable = true;
       plugins = [ "git" "history-substring-search" ];
       theme = "agnoster";
-      customPkgs = [ pkgs.zsh-autocomplete ];
     };
+    # zsh-autocomplete doesn't ship its plugin file under share/zsh/plugins/<name>
+    # the way ohMyZsh.customPkgs expects (it uses share/zsh-autocomplete/ instead),
+    # so customPkgs silently linked in nothing. Source it directly; mkAfter
+    # guarantees it loads after oh-my-zsh.sh so it wins the arrow-key bindings.
+    interactiveShellInit = lib.mkAfter ''
+      source ${pkgs.zsh-autocomplete}/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+    '';
   };
   users.defaultUserShell = pkgs.zsh;
 
@@ -273,6 +279,11 @@
   # pipx removed — broken tests in nixpkgs 26.05, re-add when fixed
   tmux
   btop
+  fastfetch
+  # headless (no ffplay/SDL2/X11 deps) — cliamp shells out to this for stream
+  # formats it has no native decoder for
+  ffmpeg-headless
+  nordic
   virt-manager
   xfce.thunar
   xfce.xfconf

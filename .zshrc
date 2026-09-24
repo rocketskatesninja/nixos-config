@@ -64,9 +64,6 @@ if [[ ! -f ~/.cache/zoxide-init.zsh || "$_zoxide_bin" -nt ~/.cache/zoxide-init.z
 fi
 source ~/.cache/zoxide-init.zsh
 
-# history-substring-search — type partial command then use ↑/↓
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
 
 # Aliases
 alias fman='compgen -c | fzf | xargs man'

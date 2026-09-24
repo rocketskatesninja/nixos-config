@@ -1,0 +1,12 @@
+#!/bin/sh
+# noctalia idle system's resumeCommand, paired with launch-screensaver.
+# Signals the screensaver script directly via its pidfile (not the kitty
+# process) so its own trap gets to drain pending input and reset terminal
+# modes (stty sane, leave alternate screen) before kitty closes the window.
+# Killing kitty itself instead races that cleanup and can leak stray
+# escape-sequence bytes (e.g. an arrow key's trailing "[A") into whatever
+# terminal regains focus next.
+
+PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
+[ -f "$PIDFILE" ] && kill -TERM "$(cat "$PIDFILE")" 2>/dev/null
+exit 0

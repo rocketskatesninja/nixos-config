@@ -6,7 +6,8 @@
 # startup size), so the art rendered small even though the window looked
 # fullscreen-ish; hyprctl dispatch fullscreen genuinely resizes the surface (and
 # therefore the PTY), it just has to happen after the window exists.
-# The paired resumeCommand kills it (pkill -f org.zorro.screensaver) on activity.
+# The paired resumeCommand (dismiss-screensaver) signals the screensaver
+# script's own pidfile on activity, so it can clean up before exiting.
 
 pgrep -f "org.zorro.screensaver" >/dev/null 2>&1 && exit 0
 
