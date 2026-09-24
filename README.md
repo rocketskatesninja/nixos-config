@@ -134,7 +134,8 @@ configuration.nix          — main NixOS system config
 hardware-configuration.nix — auto-generated hardware config
 .zshrc                     — zsh config (Oh My Zsh, fzf, zoxide, noctalia-themed prompt)
 hypr/                      — Hyprland config
-kitty/                     — terminal config
+kitty/                     — terminal config (Nord palette)
+qt/                        — qt5ct/qt6ct config + Nord color scheme, themes Qt apps (Wireshark, etc.)
 noctalia-config/           — noctalia-shell settings.json / plugins.json
 noctalia-plugins/          — custom vpn/tor/twingate bar-widget plugins for noctalia-shell
 noctalia-ipc               — helper for calling into the running noctalia-shell (launcher, lock screen)

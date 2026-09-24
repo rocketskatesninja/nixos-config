@@ -187,6 +187,16 @@
   };
   users.defaultUserShell = pkgs.zsh;
 
+  # Theme Qt apps (Wireshark is Qt6) with a custom Nord palette instead of
+  # whatever style each toolkit defaults to. Installs both qt5ct and qt6ct
+  # so it covers Qt5 and Qt6 apps alike; the actual Nord colors live in
+  # qt/colors/Nord.conf, referenced from qt/qt5ct.conf and qt/qt6ct.conf,
+  # symlinked into ~/.config/qt5ct and ~/.config/qt6ct.
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct";
+  };
+
   # Fonts
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
