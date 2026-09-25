@@ -229,6 +229,7 @@
   figlet
   yazi
   kitty
+  xdg-user-dirs
   # dconf itself comes from programs.dconf.enable, not listed here
   gsettings-desktop-schemas
   wget
