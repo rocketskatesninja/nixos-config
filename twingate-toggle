@@ -5,7 +5,22 @@ if systemctl is-active --quiet twingate; then
     sudo systemctl stop twingate &
     notify-send "Twingate" "Disconnecting..."
 else
-    sudo systemctl start twingate &
+    (
+        sudo systemctl start twingate
+        # twingated's own auth-needed notification is sent from the system
+        # service, which has no access to the desktop session bus, so it
+        # never arrives. Do the same check here instead, where notify-send
+        # actually works, and open the login link directly rather than
+        # relying on a notification action click.
+        sleep 5
+        twingate resources 2>/dev/null | awk 'NR>1 && $NF=="Pending" {print $1}' | while read -r resource; do
+            url=$(twingate auth "$resource" 2>&1 | grep -o 'https://accounts[^ ]*' | tail -1)
+            if [ -n "$url" ]; then
+                notify-send "Twingate" "Re-authentication needed for $resource — opening browser"
+                xdg-open "$url"
+            fi
+        done
+    ) &
     notify-send "Twingate" "Connecting..."
 fi
 disown

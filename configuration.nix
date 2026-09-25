@@ -187,6 +187,16 @@
   };
   users.defaultUserShell = pkgs.zsh;
 
+  # Wireshark: grants the 'wireshark' group (nope is already a member, see
+  # extraGroups above) capture rights via a setcap dumpcap wrapper, instead
+  # of running the whole GUI as root. package must match the GUI package
+  # below so the capability grant lands on the dumpcap binary actually
+  # invoked at capture time, not some other build's copy.
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
+  };
+
   # Theme Qt apps (Wireshark is Qt6) with a custom Nord palette instead of
   # whatever style each toolkit defaults to. Installs both qt5ct and qt6ct
   # so it covers Qt5 and Qt6 apps alike; the actual Nord colors live in
@@ -273,7 +283,6 @@
   sqlmap
   thc-hydra
   john
-  wireshark
   tor
   obsidian
   slack
