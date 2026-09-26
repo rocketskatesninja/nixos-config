@@ -21,7 +21,7 @@
 
   # Network aliases
   networking.extraHosts = ''
-    192.168.0.80 serv evetrade.local osint.local greps.local leads.local routepilot.local
+    192.168.0.80 serv evetrade.local osint.local greps.local leads.local routepilot.local busyrealtor.local
     192.168.0.100 boxer
     192.168.0.69 cowboy
     192.168.0.101 hermes secy.test chat.secy.test
@@ -289,6 +289,8 @@
   slack
   recon-ng
   aircrack-ng
+  wifite2
+  reaverwps-t6x
   seclists
   dnsrecon
   enum4linux
