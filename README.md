@@ -2,10 +2,6 @@
 
 NixOS 26.05 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland. Hostname: **zorro**.
 
-![Desktop screenshot](desktop-screenshot.png)
-
-![Desktop demo](desktop-demo.gif)
-
 ## Hardware
 
 | Component | Spec |
