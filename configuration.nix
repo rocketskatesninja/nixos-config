@@ -222,9 +222,24 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # glmatrix hardcodes its color in C (no --color flag), so recoloring it
+  # means patching the source at build time. Catppuccin Blue (#89b4fa),
+  # matching the waybar clock.
+  nixpkgs.overlays = [
+    (final: prev: {
+      xscreensaver = prev.xscreensaver.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          sed -i 's/r = b = 0, g = 1;/r = 0.537f, g = 0.706f, b = 0.980f;/' hacks/glx/glmatrix.c
+          sed -i 's/g = 0xFF;/r = 137; g = 180; b = 250;/' hacks/glx/glmatrix.c
+        '';
+      });
+    })
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+  xscreensaver
   terminaltexteffects
   figlet
   yazi
@@ -341,6 +356,27 @@
       sed -i 's|/usr/share/nmap/scripts/vulners.nse|${pkgs.nmap}/share/nmap/scripts/vulners.nse|g' $out/bin/nmapAutomator
     '';
   })
+  # xscreensaver's hack binaries live under libexec, which isn't linked into
+  # /run/current-system/sw, so the path has to be resolved through Nix here
+  # rather than hardcoded in a plain repo script (bit us once already with
+  # zsh-autocomplete's share/zsh-autocomplete/ layout).
+  (pkgs.writeShellScriptBin "launch-glmatrix-screensaver" ''
+    GLMATRIX="${pkgs.xscreensaver}/libexec/xscreensaver/glmatrix"
+    pgrep -f "$GLMATRIX" >/dev/null 2>&1 && exit 0
+
+    PIDFILE="''${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
+    "$GLMATRIX" &
+    echo $! > "$PIDFILE"
+
+    for i in $(seq 1 25); do
+      if hyprctl clients -j 2>/dev/null | grep -q '"class": "GLMatrix"'; then
+        hyprctl dispatch focuswindow "class:GLMatrix" >/dev/null 2>&1
+        hyprctl dispatch fullscreen 0 >/dev/null 2>&1
+        exit 0
+      fi
+      sleep 0.1
+    done
+  '')
   ];
 
   # Hibernate at critical battery regardless of AC state

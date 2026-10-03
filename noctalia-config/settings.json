@@ -450,7 +450,7 @@
         "wallpaperChange": ""
     },
     "idle": {
-        "customCommands": "[{\"timeout\":900,\"command\":\"/home/nope/nixos-config/launch-screensaver\",\"resumeCommand\":\"/home/nope/nixos-config/dismiss-screensaver\",\"name\":\"Screensaver\"}]",
+        "customCommands": "[{\"timeout\":900,\"command\":\"/run/current-system/sw/bin/launch-glmatrix-screensaver\",\"resumeCommand\":\"/home/nope/nixos-config/dismiss-screensaver\",\"name\":\"Screensaver\"}]",
         "enabled": true,
         "fadeDuration": 5,
         "lockCommand": "",
