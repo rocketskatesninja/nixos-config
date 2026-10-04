@@ -17,6 +17,7 @@ Host boxer
 Host cowboy
     HostName 192.168.0.69
     User nope
+    IdentityFile ~/.ssh/id_ed25519_homelab
 
 Host hermes
     HostName 192.168.0.101
