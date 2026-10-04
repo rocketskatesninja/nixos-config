@@ -70,6 +70,9 @@ for i in $(seq 1 60); do
         exit 1
     fi
     if sudo grep -q "Initialization Sequence Completed" "$LOG" 2>/dev/null; then
+        # Most .ovpn configs are IPv4-only - without this, IPv6 traffic
+        # bypasses the tunnel entirely and leaks the real address.
+        sudo ip6tables -A OUTPUT -j REJECT
         set_state "on"
         notify-send "VPN" "Connected ($NAME)"
         exit 0

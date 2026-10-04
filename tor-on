@@ -41,8 +41,12 @@ rollback() {
     sudo iptables -t nat -F
     sudo iptables -F
     sudo iptables -P OUTPUT ACCEPT
-    sudo ip6tables -F
-    sudo ip6tables -P OUTPUT ACCEPT
+    # Only touch ip6tables if vpn-on's independent IPv6 block isn't also
+    # relying on it right now - shared OUTPUT chain, same as tor-off.
+    if [ "$(cat /tmp/vpn-state 2>/dev/null)" != "on" ]; then
+        sudo ip6tables -F
+        sudo ip6tables -P OUTPUT ACCEPT
+    fi
     # iptables -F above wipes the LAN-only scoping on SMB/HTTP; restore it
     sudo systemctl restart firewall
 }

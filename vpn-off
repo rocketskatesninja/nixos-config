@@ -14,5 +14,13 @@ for i in $(seq 1 10); do
     sleep 1
 done
 
+# Remove the IPv6 block vpn-on added - but not if tor-on's own independent
+# block is also active right now, since this shares the same OUTPUT chain
+# and would blow that away too, silently leaving tor-state="on" leaking IPv6.
+if [ "$(cat /tmp/tor-state 2>/dev/null)" != "on" ]; then
+    sudo ip6tables -F OUTPUT
+    sudo ip6tables -P OUTPUT ACCEPT
+fi
+
 echo "off" > "$STATE"
 notify-send "VPN" "Disconnected"

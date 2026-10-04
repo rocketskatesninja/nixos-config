@@ -164,6 +164,12 @@
       # AMD GPU hardware video decoding via VA-API
       "media.ffmpeg.vaapi.enabled" = true;
       "media.hardware-video-decoding.force-enabled" = true;
+      # WebRTC leaks the real public IP via ICE/STUN candidate gathering,
+      # bypassing VPN/Tor/Twingate entirely since it operates outside the
+      # browser's proxy layer. Disabling outright rather than the partial
+      # ice.default_address_only/no_host mitigations, which only hide local
+      # interface addresses and still leak the public one via STUN.
+      "media.peerconnection.enabled" = false;
     };
   };
 
