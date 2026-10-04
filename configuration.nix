@@ -319,7 +319,6 @@
   smbmap
   smtp-user-enum
   wf-recorder
-  rclone
   # pipx removed — broken tests in nixpkgs 26.05, re-add when fixed
   tmux
   btop
