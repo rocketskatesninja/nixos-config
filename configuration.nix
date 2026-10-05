@@ -173,6 +173,12 @@
     };
   };
 
+  # Steam - uses the dedicated module rather than a bare package so the
+  # FHS-compatible wrapper, 32-bit graphics libs, and controller udev rules
+  # are set up correctly. Not opening firewall ports for Remote Play/hosting
+  # unless actually needed, given the LAN is otherwise kept locked down.
+  programs.steam.enable = true;
+
   # Zsh with Oh My Zsh
   programs.zsh = {
     enable = true;
@@ -517,12 +523,38 @@
     SystemMaxUse=200M
   '';
 
-  # Weekly GC — keep last 3 generations, delete the rest
+  # Weekly GC — deletes generations older than 3 days. --delete-older-than
+  # alone has no count floor: if 3+ days pass without a rebuild and the next
+  # one breaks something, this could delete every fallback generation in
+  # the same run, leaving nothing to roll back to. Override the service's
+  # actual command to explicitly protect the 2 most recent generations
+  # (current + 1 extra) regardless of age, then age-clean the rest.
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 3d";
   };
+  systemd.services.nix-gc.serviceConfig.ExecStart = lib.mkForce (
+    let
+      profile = "/nix/var/nix/profiles/system";
+      keep = 2;
+    in
+    "${pkgs.writeShellScript "nix-gc-keep-floor" ''
+      set -e
+      NIX_ENV=${pkgs.nix}/bin/nix-env
+      AWK=${pkgs.gawk}/bin/awk
+      total=$($NIX_ENV --list-generations -p ${profile} | wc -l)
+      if [ "$total" -gt ${toString keep} ]; then
+        protected=$($NIX_ENV --list-generations -p ${profile} | tail -n ${toString keep} | $AWK '{print $1}')
+        cutoff=$(date -d '3 days ago' +%s)
+        $NIX_ENV --list-generations -p ${profile} | while read -r gen date time _; do
+          echo "$protected" | grep -qx "$gen" && continue
+          gen_epoch=$(date -d "$date $time" +%s)
+          [ "$gen_epoch" -lt "$cutoff" ] && $NIX_ENV --delete-generations "$gen" -p ${profile}
+        done
+      fi
+      exec ${pkgs.nix}/bin/nix-collect-garbage
+    ''}"
+  );
 
   # Hard-link identical files in the nix store to save space (SSD-friendly)
   nix.optimise.automatic = true;
