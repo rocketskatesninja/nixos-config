@@ -1,0 +1,32 @@
+#!/bin/sh
+# noctalia idle system's command for the GLMatrix screensaver (xscreensaver's
+# glmatrix hack, color-patched via the overlay in configuration.nix). Plain
+# repo script instead of a Nix-built derivation (the original location) so
+# it can be edited/tested without a nixos-rebuild — same reasoning as
+# launch-screensaver/dismiss-screensaver already living here.
+#
+# Writes LAUNCHED_AT alongside PIDFILE so dismiss-screensaver can tell a
+# genuine user-activity resume apart from noctalia's own idle monitor
+# immediately flipping back to "not idle" right after this fires — observed
+# directly: both the launch and resume commands logged within the same
+# second, with zero real input in between. dismiss-screensaver ignores kill
+# requests inside that window.
+
+GLMATRIX=$(ls -d /nix/store/*xscreensaver*/libexec/xscreensaver/glmatrix 2>/dev/null | head -1)
+pgrep -f "$GLMATRIX" >/dev/null 2>&1 && exit 0
+
+PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
+LAUNCHED_AT="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.launched_at"
+
+"$GLMATRIX" &
+echo $! > "$PIDFILE"
+date +%s > "$LAUNCHED_AT"
+
+for i in $(seq 1 25); do
+    if hyprctl clients -j 2>/dev/null | grep -q '"class": "GLMatrix"'; then
+        hyprctl dispatch focuswindow "class:GLMatrix" >/dev/null 2>&1
+        hyprctl dispatch fullscreen 0 >/dev/null 2>&1
+        exit 0
+    fi
+    sleep 0.1
+done

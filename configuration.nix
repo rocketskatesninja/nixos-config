@@ -24,11 +24,13 @@
     192.168.0.80 serv evetrade.local osint.local greps.local leads.local routepilot.local busyrealtor.local punchlistify.local
     192.168.0.100 boxer
     192.168.0.69 cowboy
-    192.168.0.101 hermes secy.test chat.secy.test
+    192.168.0.101 hermes
     192.168.0.222 hydra
     5.78.138.47 punch
     192.168.0.239 metasploitable
   '';
+  
+  environment.etc.hosts.mode = "0644";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -153,6 +155,8 @@
     ];
   };
 
+  programs.nix-ld.enable = true;
+
   # Install firefox.
   programs.firefox = {
     enable = true;
@@ -195,6 +199,7 @@
     # guarantees it loads after oh-my-zsh.sh so it wins the arrow-key bindings.
     interactiveShellInit = lib.mkAfter ''
       source ${pkgs.zsh-autocomplete}/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+      ${pkgs.nix-your-shell}/bin/nix-your-shell zsh | source /dev/stdin
     '';
   };
   users.defaultUserShell = pkgs.zsh;
@@ -233,6 +238,7 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # glmatrix hardcodes its color in C (no --color flag), so recoloring it
   # means patching the source at build time. Catppuccin Blue (#89b4fa),
@@ -258,10 +264,12 @@
   yazi
   kitty
   xdg-user-dirs
+  openldap
   # dconf itself comes from programs.dconf.enable, not listed here
   gsettings-desktop-schemas
   wget
   fzf
+  nix-index
   zoxide
   quickshell
   noctalia-shell
@@ -276,6 +284,7 @@
   brightnessctl
   playerctl
   dnsutils
+  sslscan
   whois
   wirelesstools
   adwaita-icon-theme
@@ -325,19 +334,22 @@
   smbmap
   smtp-user-enum
   wf-recorder
+  weechat
   # pipx removed — broken tests in nixpkgs 26.05, re-add when fixed
   tmux
   btop
   fastfetch
   # headless (no ffplay/SDL2/X11 deps) — cliamp shells out to this for stream
   # formats it has no native decoder for
+  yt-dlp
   ffmpeg-headless
   nordic
   virt-manager
-  xfce.thunar
-  xfce.xfconf
+  thunar
+  xfconf
   cifs-utils
   samba
+  nix-your-shell
   autotiling
   (pkgs.buildGoModule rec {
     pname = "cliamp";
@@ -368,27 +380,6 @@
       sed -i 's|/usr/share/nmap/scripts/vulners.nse|${pkgs.nmap}/share/nmap/scripts/vulners.nse|g' $out/bin/nmapAutomator
     '';
   })
-  # xscreensaver's hack binaries live under libexec, which isn't linked into
-  # /run/current-system/sw, so the path has to be resolved through Nix here
-  # rather than hardcoded in a plain repo script (bit us once already with
-  # zsh-autocomplete's share/zsh-autocomplete/ layout).
-  (pkgs.writeShellScriptBin "launch-glmatrix-screensaver" ''
-    GLMATRIX="${pkgs.xscreensaver}/libexec/xscreensaver/glmatrix"
-    pgrep -f "$GLMATRIX" >/dev/null 2>&1 && exit 0
-
-    PIDFILE="''${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
-    "$GLMATRIX" &
-    echo $! > "$PIDFILE"
-
-    for i in $(seq 1 25); do
-      if hyprctl clients -j 2>/dev/null | grep -q '"class": "GLMatrix"'; then
-        hyprctl dispatch focuswindow "class:GLMatrix" >/dev/null 2>&1
-        hyprctl dispatch fullscreen 0 >/dev/null 2>&1
-        exit 0
-      fi
-      sleep 0.1
-    done
-  '')
   ];
 
   # Hibernate at critical battery regardless of AC state

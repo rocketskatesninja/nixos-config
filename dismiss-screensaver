@@ -1,12 +1,31 @@
 #!/bin/sh
-# noctalia idle system's resumeCommand, paired with launch-screensaver.
-# Signals the screensaver script directly via its pidfile (not the kitty
-# process) so its own trap gets to drain pending input and reset terminal
-# modes (stty sane, leave alternate screen) before kitty closes the window.
-# Killing kitty itself instead races that cleanup and can leak stray
-# escape-sequence bytes (e.g. an arrow key's trailing "[A") into whatever
-# terminal regains focus next.
+# noctalia idle system's resumeCommand, paired with launch-screensaver /
+# launch-glmatrix-screensaver. Signals the screensaver process directly via
+# its pidfile (not e.g. the kitty window) so its own cleanup gets to run
+# first — for the kitty/TTE screensaver that means stty sane + leaving the
+# alternate screen before the window closes, avoiding leaked escape-sequence
+# bytes into whatever terminal regains focus next.
+#
+# Debounced: noctalia's own idle monitor has been observed flipping back to
+# "not idle" within ~1s of firing the launch command, with zero real input
+# in between — a spurious self-triggered resume, not genuine user activity
+# (root cause not fully pinned down; possibly the launch script's own
+# hyprctl dispatch calls being misread as seat activity). Ignoring kill
+# requests that land within GRACE_SECS of the matching launch absorbs that
+# false resume while still dismissing normally on real activity afterward.
 
+GRACE_SECS=3
 PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.pid"
+LAUNCHED_AT="${XDG_RUNTIME_DIR:-/tmp}/org.zorro.screensaver.launched_at"
+
+if [ -f "$LAUNCHED_AT" ]; then
+    now=$(date +%s)
+    launched=$(cat "$LAUNCHED_AT" 2>/dev/null || echo 0)
+    elapsed=$((now - launched))
+    if [ "$elapsed" -ge 0 ] && [ "$elapsed" -lt "$GRACE_SECS" ]; then
+        exit 0
+    fi
+fi
+
 [ -f "$PIDFILE" ] && kill -TERM "$(cat "$PIDFILE")" 2>/dev/null
 exit 0
