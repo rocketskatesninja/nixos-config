@@ -4,7 +4,7 @@ NixOS 26.05 configuration for a Lenovo IdeaPad 82VG running Hyprland on Wayland.
 
 ![Desktop screenshot](desktop-screenshot.png)
 
-<video src="https://raw.githubusercontent.com/rocketskatesninja/nixos-config/main/desktop-demo.mp4" controls width="800"></video>
+![Desktop demo video](desktop-demo-video.gif)
 
 ![Desktop demo](desktop-demo.gif)
 
