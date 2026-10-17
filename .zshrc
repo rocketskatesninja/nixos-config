@@ -43,9 +43,15 @@ SAVEHIST=10000
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=$C_MUTED"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# Terminal screensaver (matches Omarchy's — TTE random effects) after 5 min idle, any key exits
+# Terminal screensaver (matches Omarchy's — TTE random effects) after 5 min idle, any key exits.
+# No zle calls in here on purpose: zsh has no safe passive-idle mechanism
+# other than this SIGALRM-based trap, and if the signal lands mid-redraw,
+# a zle widget call from inside the handler can SIGSEGV (confirmed via a
+# coredump backtrace: zle redraw -> signal -> zexit -> crash in local-var
+# cleanup). screensaver's own exit_screensaver already leaves the
+# alternate screen cleanly, which restores the prior prompt on its own.
 TMOUT=300
-TRAPALRM() { /home/nope/nixos-config/screensaver; printf "\e]12;${C_CURSOR}\a"; zle reset-prompt; }
+TRAPALRM() { /home/nope/nixos-config/screensaver; printf "\e]12;${C_CURSOR}\a"; }
 
 # Catppuccin Mocha LS_COLORS
 export LS_COLORS="di=1;34:ln=36:so=35:pi=33:ex=32:bd=1;33:cd=1;33:su=31:sg=31:tw=1;34:ow=1;34"

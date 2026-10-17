@@ -35,6 +35,16 @@
   # Enable networking
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.powersave = false;
+  # External aircrack-ng practice adapter (rt2800usb) - NetworkManager
+  # otherwise shares one wpa_supplicant.service across every wireless
+  # interface, so plugging/unplugging this adapter (or airmon-ng switching
+  # it into monitor mode, which also renames the interface) restarts that
+  # shared service and knocks the internal card's connection offline as
+  # collateral damage. Matched by the adapter's permanent hardware MAC, not
+  # its current address - NetworkManager randomizes the visible MAC per
+  # connection, so a match on that would stop working after the next
+  # reconnect. Update this MAC when the adapter is replaced.
+  networking.networkmanager.unmanaged = [ "mac:00:87:42:10:00:1e" ];
   security.polkit.enable = true;
   programs.dconf.enable = true;
   services.gnome.gnome-keyring.enable = true;
@@ -291,6 +301,8 @@
   gh
   claude-code
   git
+  neovim
+  google-chrome
   thunderbird
   telegram-desktop
   twingate
@@ -328,6 +340,24 @@
   aircrack-ng
   wifite2
   reaverwps-t6x
+  # airgeddon deps
+  iw
+  pciutils
+  bettercap
+  ettercap
+  dnsmasq
+  hcxtools
+  hcxdumptool
+  kea
+  bully
+  pixiewps
+  asleap
+  hostapd
+  mdk4
+  crunch
+  lighttpd
+  openssl
+  tcpdump
   seclists
   dnsrecon
   enum4linux
