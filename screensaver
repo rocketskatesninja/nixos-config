@@ -29,6 +29,11 @@ exit_screensaver() {
 }
 trap exit_screensaver INT TERM HUP QUIT
 
+# Single dismiss-check, used both while tte is animating and between cycles.
+check_dismiss() {
+    read -t 0.1 -n 1 -s _ && exit_screensaver
+}
+
 RAW_ART=$(figlet -f big "$(hostname)" | awk '
 { a[NR] = $0 }
 END {
@@ -40,25 +45,21 @@ END {
 }')
 
 render_art() {
-    COLS=$(tput cols 2>/dev/null || echo 80)
-    ROWS=$(tput lines 2>/dev/null || echo 24)
-    SCALE=$(printf '%s\n' "$RAW_ART" | awk -v cols="$COLS" -v rows="$ROWS" '
-    { if (length($0) > maxw) maxw = length($0) }
-    END {
-        nrows = NR
-        scale_w = (cols * 0.9) / maxw
-        scale_h = (rows * 0.9) / nrows
-        scale = (scale_w < scale_h) ? scale_w : scale_h
-        if (scale < 1) scale = 1
-        printf "%.2f", scale
-    }')
-    printf '%s\n' "$RAW_ART" | awk -v scale="$SCALE" '
+    local cols rows
+    cols=$(tput cols 2>/dev/null || echo 80)
+    rows=$(tput lines 2>/dev/null || echo 24)
+    printf '%s\n' "$RAW_ART" | awk -v cols="$cols" -v rows="$rows" '
     {
         lines[NR] = $0
         if (length($0) > maxw) maxw = length($0)
     }
     END {
         nrows = NR
+        scale = (cols * 0.9) / maxw
+        scale_h = (rows * 0.9) / nrows
+        if (scale_h < scale) scale = scale_h
+        if (scale < 1) scale = 1
+
         new_rows = int(nrows * scale + 0.5)
         new_cols = int(maxw * scale + 0.5)
         for (r = 0; r < new_rows; r++) {
@@ -94,14 +95,10 @@ while true; do
     tte_pid=$!
 
     while kill -0 "$tte_pid" 2>/dev/null; do
-        if read -t 0.1 -n 1 -s _; then
-            exit_screensaver
-        fi
+        check_dismiss
     done
     wait "$tte_pid" 2>/dev/null
     tte_pid=""
 
-    if read -t 0.1 -n 1 -s _; then
-        exit_screensaver
-    fi
+    check_dismiss
 done
